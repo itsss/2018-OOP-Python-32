@@ -56,7 +56,7 @@ def print_all_score():
 def final_score():
     pass
 '''
-(최종 점수 출력)
+(최종 순위 출력)
 플레이어 최종 이득(점수) 출력
 최종수익 (판매액 - 구매액)
 '''
