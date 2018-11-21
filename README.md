@@ -39,7 +39,7 @@ PyQt5 등의 라이브러리를 사용하여 GUI 표현을 한다. 가격 변동
  * System Coding
  
 ### 윤성민
- * 아이디어 제시
+ * 데이터 정리
  * System Coding
 
 ## 9. 기타
