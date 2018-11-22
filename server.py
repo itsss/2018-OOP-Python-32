@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Title       OOP Project
-Author      ITSC (Taewon Kang)
 Date        2018.11.22
 """
 
