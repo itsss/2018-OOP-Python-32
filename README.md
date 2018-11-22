@@ -29,9 +29,7 @@
 게임의 핵심이 되는 주요 기능은 GUI로 가격의 변동을 나타내는 텍스트를 그림과 함께 출력하는 것이다. 
 
 예시는 아래 그림과 같다.
-![GUI Example](https://raw.githubusercontent.com/itsss/2018-OOP-Python-economic/master/image/example.png)
-
-**예시문구) 브라질이 최악의 가뭄을 경험하고 있다.**
+![GUI Example](https://raw.githubusercontent.com/itsss/2018-OOP-Python-economic/master/image/gui_example.png)
 
 서버에서 공급/수요의 변동을 나타내는 데이터를 임의로 선택해서 데이터에 해당되는 그림과 함께 각 플레이어에게 출력한다. 
 
