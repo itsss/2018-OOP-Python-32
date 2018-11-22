@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Title       OOP Project 
-Ref         Assignment 4에서 응용
+Ref         Assignment 4에서 응용 (OOP Socket Ex)
 Date        2018.11.22
 """
 
