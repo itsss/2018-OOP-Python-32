@@ -20,8 +20,8 @@ def trading(item_list):
             # 매 상품마다 상품의 종류와 보유 수량을 표시
             # 남은 구입 제한, 판매 제한을 표시
             print("Trading item: [%s] remain: [%s] left" % (item, now))
-            print("purchase limit: %d" % (5 - buy))
-            print("Sale limit: %d" % (10 - sale))
+            print("purchase limit: %d" % (limit_buy - buy))
+            print("Sale limit: %d" % (limit_sale - sale))
             # 일단 넣어뒀습니다만 나중에 오류나면 추가하는 걸로@@@@@@
             try:
                 trade, amount = input().split()
