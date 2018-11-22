@@ -90,7 +90,7 @@ def connection():
 thread_server = threading.Thread(target=connection, args=())
 thread_server.start()
 
-print("============== AIPaper Server ==============")
+print("============== economic Server ==============")
 
 thread_server.join()
 sck.close()
