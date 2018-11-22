@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Title       OOP Project
+Title       OOP Project 
+Ref         Assignment 4에서 응용
 Date        2018.11.22
 """
 
