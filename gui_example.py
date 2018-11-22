@@ -1,10 +1,8 @@
 # pythonspot.com
 
 import sys
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
 
 
@@ -29,7 +27,22 @@ class App(QWidget):
         self.resize(pixmap.width(), pixmap.height())
         self.title = QLabel("소고기 가격이 올랐습니다", self)
         self.title.setStyleSheet("font: 30pt; color:black")
+
+        btn1 = QPushButton("<", self)
+        btn1.move(20, 20)
+        btn1.clicked.connect(self.btn1_clicked)
+
+        btn2 = QPushButton(">", self)
+        btn2.move(80, 20)
+        btn2.clicked.connect(self.btn2_clicked)
+
         self.show()
+
+    def btn1_clicked(self):
+        QMessageBox.about(self, "message", "이전 그림 보기")
+
+    def btn2_clicked(self):
+        QMessageBox.about(self, "message", "다음 그림 보기")
 
 
 if __name__ == '__main__':
