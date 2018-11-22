@@ -1,3 +1,5 @@
+#sd는 가격 변동 리스트입니다 1이면 상승, -1이면 하락 ex) sd=[1, -1, 1, -1, -1, 1, -1, 1]
+
 import random
 
 def price_change(sd, item_price):
