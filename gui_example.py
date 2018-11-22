@@ -1,8 +1,11 @@
 # pythonspot.com
 
 import sys
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel
 from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import *
+
 
 
 class App(QWidget):
@@ -21,10 +24,11 @@ class App(QWidget):
 
         # Create widget
         label = QLabel(self)
-        pixmap = QPixmap('image/example.png')
+        pixmap = QPixmap('image/beef_increase.png')
         label.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
-
+        self.title = QLabel("소고기 가격이 올랐습니다", self)
+        self.title.setStyleSheet("font: 30pt; color:black")
         self.show()
 
 
