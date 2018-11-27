@@ -57,6 +57,21 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtCore import QSize
 import socket, threading
+# Ref: https://pythonprogramminglanguage.com/pyqt5-hello-world/
+
+class game(QMainWindow):
+    # 새로운 Window 만들어야 함
+    def __init__(self, parent=None):
+        super(game, self).__init__(parent)
+
+        self.setMinimumSize(QSize(250, 140))
+        self.setWindowTitle("Economic")
+
+        centralWidget = QWidget(self)
+        self.setCentralWidget(centralWidget)
+
+        gridLayout = QGridLayout(self)
+        centralWidget.setLayout(gridLayout)
 
 class intro(QMainWindow):
     '''
@@ -108,22 +123,20 @@ class intro(QMainWindow):
         serv = (ip, port)
 
         sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        print('234234')
-        # ip = '127.0.0.1'
-        # print(type(ip))
 
-        # 접속하는 부분(코드 118번) 에서 응답 없음 오류 발생
+        # 접속하는 부분(코드 sck.connect(serv)) 에서 GUI 응답 없음 오류 발생
         # 해결 방안이 필요
-        try:
-            sck.connect(serv)
-        except ConnectionRefusedError:
-            QMessageBox.about(self, "Economic", "서버 상태를 확인하십시오.")
-            print('서버 상태를 확인하십시오.')
-
-        except OSError:
-            print('서버 IP를 올바르게 입력하세요.')
-            QMessageBox.about(self, "Economic", "서버 IP를 올바르게 입력하세요.")
-
+        # try:
+        #     sck.connect(serv)
+        # except ConnectionRefusedError:
+        #     QMessageBox.about(self, "Economic", "서버 상태를 확인하십시오.")
+        #     print('서버 상태를 확인하십시오.')
+        #
+        # except OSError:
+        #     print('서버 IP를 올바르게 입력하세요.')
+        #     QMessageBox.about(self, "Economic", "서버 IP를 올바르게 입력하세요.")
+        dialog = game()
+        dialog.show()
 
 
 
