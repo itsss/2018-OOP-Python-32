@@ -57,6 +57,7 @@ from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QLineEdit
 from PyQt5.QtCore import QSize
 
+# Ref: https://pythonprogramminglanguage.com/pyqt5-hello-world/
 class HelloWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
