@@ -1,5 +1,6 @@
 #일단 구매 판매하는 함수는 만들었습니다.
 #근데 이번 턴의 수익을 확인하기 위해 상품 판매수/구입수를 반환 추가 필요.
+# traiding 함수는 dictionary 타입의 item_list를 입력 받음. {물건 종류:물건 수량}
 
 def trading(item_list):
     """
