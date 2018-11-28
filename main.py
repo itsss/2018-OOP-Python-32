@@ -28,7 +28,7 @@ def get_text():
 각 턴에서 사용될 물건 시세 변동여부와 공급/수요 여부 텍스트 파일을 만들기
 '''
 
-def print_price():
+def print_price_text():
     pass
 '''
 물건 시세 변동 여부와 공급/수요 여부 텍스트 파일 출력하기
