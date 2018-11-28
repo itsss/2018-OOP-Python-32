@@ -22,16 +22,16 @@ def get_input(current_list):
     #
     #
 
-def print_status():
+def get_text():
     pass
 '''
-물건의 공급/수요 출력
+각 턴에서 사용될 물건 시세 변동여부와 공급/수요 여부 텍스트 파일을 만들기
 '''
 
 def print_price():
     pass
 '''
-물건 시세 변동 여부 출력
+물건 시세 변동 여부와 공급/수요 여부 텍스트 파일 출력하기
 '''
 
 def get_ind_score():
@@ -68,8 +68,9 @@ print('='*50)
 item_list = {'커피': 5, '밀가루': 5, '희토류': 5, '석유': 5, '소고기': 5, '시멘트': 5, '알루미늄': 5, '강철': 5]
 turns = 5
 
+price_text()
+
 for i in range(turns):
-    print_price()
     print_price()
     trading(item_list)
     print_ind_score()
