@@ -51,98 +51,58 @@
 #     app = QApplication(sys.argv)
 #     ex = App()
 #     sys.exit(app.exec_())
-
-import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtCore import QSize
 import socket, threading
-# Ref: https://pythonprogramminglanguage.com/pyqt5-hello-world/
+# from mainwindow import Ui_MainWindow
+# Ref: https://stackoverflow.com/questions/11812000/login-dialog-pyqt
 
-class game(QMainWindow):
-    # 새로운 Window 만들어야 함
+class Connect(QtWidgets.QDialog):
     def __init__(self, parent=None):
-        super(game, self).__init__(parent)
+        super(Connect, self).__init__(parent)
+        self.serverIP = QtWidgets.QLineEdit(self)
+        self.buttonconn = QtWidgets.QPushButton('Connect', self)
+        self.buttonconn.clicked.connect(self.handleLogin)
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addWidget(self.serverIP)
+        layout.addWidget(self.buttonconn)
 
-        self.setMinimumSize(QSize(250, 140))
-        self.setWindowTitle("Economic")
-
-        centralWidget = QWidget(self)
-        self.setCentralWidget(centralWidget)
-
-        gridLayout = QGridLayout(self)
-        centralWidget.setLayout(gridLayout)
-
-class intro(QMainWindow):
-    '''
-    프로그램을 작동할 때 클라이언트에서 뜨는 화면입니다.
-    '''
-    def __init__(self):
-        QMainWindow.__init__(self)
-
-        self.setMinimumSize(QSize(250, 140))
-        self.setWindowTitle("Economic")
-
-        centralWidget = QWidget(self)
-        self.setCentralWidget(centralWidget)
-
-        gridLayout = QGridLayout(self)
-        centralWidget.setLayout(gridLayout)
-
-        self.ui()
-
-    def ui(self):
-        btn = QPushButton('connect', self)
-        btn.setToolTip('start game')
-        btn.move(50, 50)
-
-        btn2 = QPushButton('quit', self)
-        btn2.setToolTip('quit game')
-        btn2.move(50, 80)
-
-        self.nameLabel = QLabel(self)
-        self.nameLabel.setText('서버주소:')
-        self.line = QLineEdit(self)
-
-        self.line.move(80, 20)
-        self.line.resize(100, 25)
-        self.nameLabel.move(20, 20)
-
-        btn.clicked.connect(self.push1)
-        # btn2.clicked.connect(exit())
-
-    def push1(self):
-        '''
-        사용자가 connect 버튼을 눌렀을 때 사용하는 함수
-        :return:
-        '''
-        var = self.line.text()
-        print(var)
-        ip = str(var)
-        port = 50035
-        serv = (ip, port)
-
+    def handleLogin(self):
+        var = self.serverIP.text()
+        serv = (str(var), 50000)
         sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        # 접속하는 부분(코드 sck.connect(serv)) 에서 GUI 응답 없음 오류 발생
-        # 해결 방안이 필요
-        # try:
-        #     sck.connect(serv)
-        # except ConnectionRefusedError:
-        #     QMessageBox.about(self, "Economic", "서버 상태를 확인하십시오.")
-        #     print('서버 상태를 확인하십시오.')
-        #
-        # except OSError:
-        #     print('서버 IP를 올바르게 입력하세요.')
-        #     QMessageBox.about(self, "Economic", "서버 IP를 올바르게 입력하세요.")
-        dialog = game()
-        dialog.show()
+        try:
+            sck.settimeout(5)
+            sck.connect(serv)
+            self.accept()
 
+        except ConnectionRefusedError:
+            QMessageBox.about(self, "Economic", "서버 상태를 확인하십시오.")
+        except OSError:
+            QMessageBox.about(self, "Economic", "서버 상태를 확인하십시오.")
 
+class Window(QMainWindow):
+    def __init__(self, parent=None):
+        super(Window, self).__init__(parent)
+        self.setMinimumSize(QSize(640, 480))
+        self.setWindowTitle("Economic")
 
-if __name__ == "__main__":
+        centralWidget = QWidget(self)
+        self.setCentralWidget(centralWidget)
+
+        gridLayout = QGridLayout(self)
+        centralWidget.setLayout(gridLayout)
+        # self.ui = Ui_MainWindow()
+        # self.ui.setupUi(self)
+
+if __name__ == '__main__':
+    import sys
     app = QtWidgets.QApplication(sys.argv)
-    mainWin = intro()
-    mainWin.show()
-    sys.exit( app.exec_() )
+    conn = Connect()
 
+    if conn.exec_() == QtWidgets.QDialog.Accepted:
+        window = Window()
+        window.show()
+        sys.exit(app.exec_())
