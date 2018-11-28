@@ -1,57 +1,5 @@
-# # pythonspot.com
-#
-# import sys
-# from PyQt5.QtGui import QIcon, QPixmap
-# from PyQt5 import QtCore, QtWidgets
-# from PyQt5.QtWidgets import *
-#
-# class App(QWidget):
-#     def __init__(self):
-#         super().__init__()
-#         self.title = 'OOP_Economic'
-#         self.left = 10
-#         self.top = 10
-#         self.width = 640
-#         self.height = 480
-#         self.initUI()
-#
-#     def initUI(self):
-#         self.setWindowTitle(self.title)
-#         self.setGeometry(self.left, self.top, self.width, self.height)
-#
-#         # Create widget
-#         label = QLabel(self)
-#         pixmap = QPixmap('image/beef_increase.png')
-#         pixmap.scaled(32, 32, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
-#         label.setPixmap(pixmap)
-#
-#         self.resize(pixmap.width(), pixmap.height())
-#         self.title = QLabel("소고기 가격이 올랐습니다", self)
-#         self.title.setStyleSheet("font: 30pt; color:black")
-#         self.title.setAlignment(QtCore.Qt.AlignBottom)
-#
-#         btn1 = QPushButton("<", self)
-#         btn1.move(20, 20)
-#         btn1.clicked.connect(self.btn1_clicked)
-#
-#         btn2 = QPushButton(">", self)
-#         btn2.move(80, 20)
-#         btn2.clicked.connect(self.btn2_clicked)
-#
-#         self.show()
-#
-#     def btn1_clicked(self):
-#         QMessageBox.about(self, "message", "이전 그림 보기")
-#
-#     def btn2_clicked(self):
-#         QMessageBox.about(self, "message", "다음 그림 보기")
-#
-#
-# if __name__ == '__main__':
-#     app = QApplication(sys.argv)
-#     ex = App()
-#     sys.exit(app.exec_())
 from PyQt5 import QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtCore import QSize
 import socket, threading
@@ -83,19 +31,157 @@ class Connect(QtWidgets.QDialog):
         except OSError:
             QMessageBox.about(self, "Economic", "서버 상태를 확인하십시오.")
 
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(620, 506)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.listView = QtWidgets.QListView(self.centralwidget)
+        self.listView.setGeometry(QtCore.QRect(380, 30, 231, 192))
+        self.listView.setObjectName("listView")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(380, 10, 111, 16))
+        self.label.setObjectName("label")
+        self.listView_2 = QtWidgets.QListView(self.centralwidget)
+        self.listView_2.setGeometry(QtCore.QRect(380, 260, 231, 192))
+        self.listView_2.setObjectName("listView_2")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(380, 240, 111, 16))
+        self.label_2.setObjectName("label_2")
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(10, 40, 351, 261))
+        self.widget.setObjectName("widget")
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(10, 10, 31, 23))
+        self.pushButton.setObjectName("pushButton")
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(50, 10, 31, 23))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(20, 330, 41, 16))
+        self.label_3.setObjectName("label_3")
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_4.setGeometry(QtCore.QRect(20, 360, 41, 16))
+        self.label_4.setObjectName("label_4")
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setGeometry(QtCore.QRect(20, 390, 41, 16))
+        self.label_5.setObjectName("label_5")
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setGeometry(QtCore.QRect(20, 420, 41, 16))
+        self.label_6.setObjectName("label_6")
+        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.label_7.setGeometry(QtCore.QRect(200, 330, 41, 16))
+        self.label_7.setObjectName("label_7")
+        self.label_8 = QtWidgets.QLabel(self.centralwidget)
+        self.label_8.setGeometry(QtCore.QRect(200, 360, 41, 20))
+        self.label_8.setObjectName("label_8")
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
+        self.label_9.setGeometry(QtCore.QRect(200, 390, 51, 20))
+        self.label_9.setObjectName("label_9")
+        self.label_10 = QtWidgets.QLabel(self.centralwidget)
+        self.label_10.setGeometry(QtCore.QRect(200, 420, 51, 20))
+        self.label_10.setObjectName("label_10")
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setGeometry(QtCore.QRect(80, 330, 31, 20))
+        self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_2.setGeometry(QtCore.QRect(120, 330, 31, 20))
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_3.setGeometry(QtCore.QRect(80, 360, 31, 20))
+        self.lineEdit_3.setObjectName("lineEdit_3")
+        self.lineEdit_4 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_4.setGeometry(QtCore.QRect(120, 360, 31, 20))
+        self.lineEdit_4.setObjectName("lineEdit_4")
+        self.lineEdit_5 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_5.setGeometry(QtCore.QRect(80, 390, 31, 20))
+        self.lineEdit_5.setObjectName("lineEdit_5")
+        self.lineEdit_6 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_6.setGeometry(QtCore.QRect(120, 390, 31, 20))
+        self.lineEdit_6.setObjectName("lineEdit_6")
+        self.lineEdit_7 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_7.setGeometry(QtCore.QRect(80, 420, 31, 20))
+        self.lineEdit_7.setObjectName("lineEdit_7")
+        self.lineEdit_8 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_8.setGeometry(QtCore.QRect(120, 420, 31, 20))
+        self.lineEdit_8.setObjectName("lineEdit_8")
+        self.lineEdit_9 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_9.setGeometry(QtCore.QRect(260, 330, 31, 20))
+        self.lineEdit_9.setObjectName("lineEdit_9")
+        self.lineEdit_10 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_10.setGeometry(QtCore.QRect(300, 330, 31, 20))
+        self.lineEdit_10.setObjectName("lineEdit_10")
+        self.lineEdit_11 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_11.setGeometry(QtCore.QRect(260, 360, 31, 20))
+        self.lineEdit_11.setObjectName("lineEdit_11")
+        self.lineEdit_12 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_12.setGeometry(QtCore.QRect(300, 360, 31, 20))
+        self.lineEdit_12.setObjectName("lineEdit_12")
+        self.lineEdit_13 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_13.setGeometry(QtCore.QRect(260, 390, 31, 20))
+        self.lineEdit_13.setObjectName("lineEdit_13")
+        self.lineEdit_14 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_14.setGeometry(QtCore.QRect(300, 390, 31, 20))
+        self.lineEdit_14.setObjectName("lineEdit_14")
+        self.lineEdit_15 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_15.setGeometry(QtCore.QRect(260, 420, 31, 20))
+        self.lineEdit_15.setObjectName("lineEdit_15")
+        self.lineEdit_16 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_16.setGeometry(QtCore.QRect(300, 420, 31, 20))
+        self.lineEdit_16.setObjectName("lineEdit_16")
+        self.label_11 = QtWidgets.QLabel(self.centralwidget)
+        self.label_11.setGeometry(QtCore.QRect(80, 310, 31, 16))
+        self.label_11.setObjectName("label_11")
+        self.label_12 = QtWidgets.QLabel(self.centralwidget)
+        self.label_12.setGeometry(QtCore.QRect(120, 310, 31, 16))
+        self.label_12.setObjectName("label_12")
+        self.label_13 = QtWidgets.QLabel(self.centralwidget)
+        self.label_13.setGeometry(QtCore.QRect(260, 310, 31, 16))
+        self.label_13.setObjectName("label_13")
+        self.label_14 = QtWidgets.QLabel(self.centralwidget)
+        self.label_14.setGeometry(QtCore.QRect(300, 310, 31, 16))
+        self.label_14.setObjectName("label_14")
+        self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_3.setGeometry(QtCore.QRect(150, 450, 75, 31))
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.lineEdit_17 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_17.setGeometry(QtCore.QRect(90, 10, 271, 20))
+        self.lineEdit_17.setObjectName("lineEdit_17")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "EconomicGame"))
+        self.label.setText(_translate("MainWindow", "접속한 사용자 목록"))
+        self.label_2.setText(_translate("MainWindow", "Status"))
+        self.pushButton.setText(_translate("MainWindow", "<"))
+        self.pushButton_2.setText(_translate("MainWindow", ">"))
+        self.label_3.setText(_translate("MainWindow", "커피"))
+        self.label_4.setText(_translate("MainWindow", "밀가루"))
+        self.label_5.setText(_translate("MainWindow", "희토류"))
+        self.label_6.setText(_translate("MainWindow", "석유"))
+        self.label_7.setText(_translate("MainWindow", "소고기"))
+        self.label_8.setText(_translate("MainWindow", "시멘트"))
+        self.label_9.setText(_translate("MainWindow", "알루미늄"))
+        self.label_10.setText(_translate("MainWindow", "강철"))
+        self.label_11.setText(_translate("MainWindow", "사기"))
+        self.label_12.setText(_translate("MainWindow", "팔기"))
+        self.label_13.setText(_translate("MainWindow", "사기"))
+        self.label_14.setText(_translate("MainWindow", "팔기"))
+        self.pushButton_3.setText(_translate("MainWindow", "결정"))
+
 class Window(QMainWindow):
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
-        self.setMinimumSize(QSize(640, 480))
+        self.setMinimumSize(QSize(620, 506))
         self.setWindowTitle("Economic")
-
-        centralWidget = QWidget(self)
-        self.setCentralWidget(centralWidget)
-
-        gridLayout = QGridLayout(self)
-        centralWidget.setLayout(gridLayout)
-        # self.ui = Ui_MainWindow()
-        # self.ui.setupUi(self)
 
 if __name__ == '__main__':
     import sys
@@ -103,6 +189,10 @@ if __name__ == '__main__':
     conn = Connect()
 
     if conn.exec_() == QtWidgets.QDialog.Accepted:
-        window = Window()
-        window.show()
+        # window = Window()
+        # window.show()
+        MainWindow = QtWidgets.QMainWindow()
+        ui = Ui_MainWindow()
+        ui.setupUi(MainWindow)
+        MainWindow.show()
         sys.exit(app.exec_())
