@@ -3,29 +3,12 @@ import os, random
 item_list = {'커피': 5, '밀가루': 5, '희토류': 5, '석유': 5, '소고기': 5, '시멘트': 5, '알루미늄': 5, '강철': 5]
 turns = 5
              
-def get_input(current_list):
+def trading(item_list):
     pass
 '''
 사용자에게 사자/팔자, 아이템, 수량을 입력받아
 현재 사용자의 리스트를 반환해 줌 (사고 판 내역도 정산해야 하므로 이 또한 고려할 것)
 '''
-    # buy = 0
-    # sale = 0
-    # print('커피, 밀가루, 희토류, 석유, 소고기, 시멘트, 알루미늄, 강철')
-    # met = input()
-    #
-    # if str(met) == "exit":
-    #     print("Thank you for using this program")
-    #     print("End of the Game")
-    #     exit()
-    #
-    # else:
-    #     meth, inp, price = met.split(" ")
-    #     if str(meth) == "buy":
-    #
-    #     if str(meth) == "sale":
-    #
-    #
 
 def get_price_change(item_list): 
 '''
