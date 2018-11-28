@@ -65,9 +65,17 @@ print('='*50)
 print('economic game')
 print('='*50)
 
-while True:
-    current_list = [5, 5, 5, 5, 5, 5, 5, 5]
-    curr, deal = get_input(current_list)
+item_list = {'커피': 5, '밀가루': 5, '희토류': 5, '석유': 5, '소고기': 5, '시멘트': 5, '알루미늄': 5, '강철': 5]
+turns = 5
+
+for i in range(turns):
+    print_price()
+    print_price()
+    trading(item_list)
+    print_ind_score()
+    print_all_score()
+    
+final_score()
 
 '''
 Main 함수 출력
