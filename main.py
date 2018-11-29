@@ -52,13 +52,6 @@ def print_price_text(turns):
         print(line)
     fr.close()
 
-def get_ind_score():
-    pass
-
-'''
-개인별 점수 구하기
-'''
-
 def print_ind_score():
     pass
 '''
