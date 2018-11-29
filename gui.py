@@ -31,7 +31,7 @@ class Connect(QtWidgets.QDialog):
         except OSError:
             QMessageBox.about(self, "Economic", "서버 상태 / IP 주소를 확인하십시오.")
 
-class Ui_MainWindow(object):
+class Ui_MainWindow(QMainWindow, object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(620, 506)
@@ -145,6 +145,8 @@ class Ui_MainWindow(object):
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setGeometry(QtCore.QRect(150, 450, 75, 31))
         self.pushButton_3.setObjectName("pushButton_3")
+        self.pushButton_3.clicked.connect(self.btn_choice_clicked)
+
         self.lineEdit_17 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_17.setGeometry(QtCore.QRect(90, 10, 271, 20))
         self.lineEdit_17.setObjectName("lineEdit_17")
@@ -175,7 +177,49 @@ class Ui_MainWindow(object):
         self.label_12.setText(_translate("MainWindow", "팔기"))
         self.label_13.setText(_translate("MainWindow", "사기"))
         self.label_14.setText(_translate("MainWindow", "팔기"))
+
+        self.lineEdit.setText(_translate("MainWindow", "0"))
+        self.lineEdit_2.setText(_translate("MainWindow", "0"))
+        self.lineEdit_3.setText(_translate("MainWindow", "0"))
+        self.lineEdit_4.setText(_translate("MainWindow", "0"))
+        self.lineEdit_5.setText(_translate("MainWindow", "0"))
+        self.lineEdit_6.setText(_translate("MainWindow", "0"))
+        self.lineEdit_7.setText(_translate("MainWindow", "0"))
+        self.lineEdit_8.setText(_translate("MainWindow", "0"))
+        self.lineEdit_9.setText(_translate("MainWindow", "0"))
+        self.lineEdit_10.setText(_translate("MainWindow", "0"))
+        self.lineEdit_11.setText(_translate("MainWindow", "0"))
+        self.lineEdit_12.setText(_translate("MainWindow", "0"))
+        self.lineEdit_13.setText(_translate("MainWindow", "0"))
+        self.lineEdit_14.setText(_translate("MainWindow", "0"))
+        self.lineEdit_15.setText(_translate("MainWindow", "0"))
+        self.lineEdit_16.setText(_translate("MainWindow", "0"))
+
         self.pushButton_3.setText(_translate("MainWindow", "결정"))
+
+    def btn_choice_clicked(self):
+        buy = int(self.lineEdit.text() + self.lineEdit_3.text() + self.lineEdit_5.text() + self.lineEdit_7.text() + self.lineEdit_9.text() + self.lineEdit_11.text() + self.lineEdit_13.text() + self.lineEdit_15.text())
+        sale = int(self.lineEdit_2.text() + self.lineEdit_4.text() + self.lineEdit_6.text() + self.lineEdit_8.text() + self.lineEdit_10.text() + self.lineEdit_12.text() + self.lineEdit_14.text() + self.lineEdit_16.text())
+
+        if buy > 5:
+            QMessageBox.about(self, "Economic", "5개 초과로 살 수 없습니다.")
+
+        if sale > 10:
+            QMessageBox.about(self, "Economic", "10개 초과로 팔 수 없습니다.")
+
+        # else:
+            # Dict 만들어 주고 서버로 전송하는 부분 추가
+
+
+        # print(self.lineEdit.text())
+        # print(self.lineEdit_3.text())
+        # print(self.lineEdit_5.text())
+        # print(self.lineEdit_7.text())
+        # print(self.lineEdit_9.text())
+        # print(self.lineEdit_11.text())
+        # print(self.lineEdit_13.text())
+        # print(self.lineEdit_15.text())
+
 
 class Window(QMainWindow):
     def __init__(self, parent=None):
