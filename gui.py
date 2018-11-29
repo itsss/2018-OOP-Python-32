@@ -27,9 +27,9 @@ class Connect(QtWidgets.QDialog):
             self.accept()
 
         except ConnectionRefusedError:
-            QMessageBox.about(self, "Economic", "서버 상태를 확인하십시오.")
+            QMessageBox.about(self, "Economic", "서버 상태 / IP 주소를 확인하십시오.")
         except OSError:
-            QMessageBox.about(self, "Economic", "서버 상태를 확인하십시오.")
+            QMessageBox.about(self, "Economic", "서버 상태 / IP 주소를 확인하십시오.")
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
