@@ -10,41 +10,54 @@ def trading(item_list):
 현재 사용자의 리스트를 반환해 줌 (사고 판 내역도 정산해야 하므로 이 또한 고려할 것)
 '''
 
-def get_price_change(item_list): 
-'''
-각 턴에서 사용될 물건 시세 변동여부와 공급/수요 여부 텍스트 파일을 만들기
-'''
-    gloabal turns 
-             
-    flist = os.listdir('price_data')
+def get_price_change(item_list):
+    '''
+    각 턴에서 사용될 파일 2개 만들기
+    1. 물건 시세 변동여부와 공급/수요 여부 텍스트 파일
+    2. 가격 변동 여부(-1/1) 파일 만들기
+    '''
+gloabal turns
+
+flist = os.listdir('price_data')
+
+for file in flist:
+    fr = open('price_data\\' + file, 'r')
+    lines = f.readlines()
+    random.shuffle(lines)
+    fr.close()
+
+    fw = open('price_data\\' + file, 'w')
+    fw.write(lines)
+    fw.close()
+
+for cnt in range(turns):
+    new_text = 'price_text_' + str(cnt) + '.txt'
+    new_updown = 'price_updown_' + str(cnt) + '.txt'
+
+    fw_text = open('price_text\\' + new_text, 'w')
+    fw_updown = open('price_updown\\' + new_updown, 'w')
 
     for file in flist:
         fr = open('price_data\\' + file, 'r')
         lines = fr.readlines()
-        random.shuffle(lines)
+        price = lines[cnt]
+        fw_text.write(price)
+
+        if price.split('(')[1].startswith('공급') == Ture:
+            # 공급... 다음시간에 마무리
+        else:
+          # 수요  
         fr.close()
 
-    for cnt in range(turns):
-        newname = 'price_change_' + str(cnt) + '.txt'
-        fw = open('price_change\\' + newname, 'w')
-        
-        for file in flist:
-            name = os.path.split(file)[0]
-            fr = open('price_data\\' + file, 'r')
-            lines = fr.readlines()
-            price = name + ':' + lines[cnt]
-            fw.write(price)
-            fr.close()
-             
-        fw.close()
+    fw_text.close()
              
 def print_price_text(turns):
     '''
     물건 시세 변동 여부와 공급/수요 여부 텍스트 파일 출력하기
     '''
 
-    file = 'price_change_' + str(turns) + '.txt'
-    fr = open('price_change\\' + file, 'r')
+    file = 'price_text_' + str(turns) + '.txt'
+    fr = open('price_text\\' + file, 'r')
     while True:
         line = fr.readline()
         if not line: 
@@ -52,6 +65,7 @@ def print_price_text(turns):
         print(line)
     fr.close()
 
+       
 def print_ind_score():
     pass
 '''
