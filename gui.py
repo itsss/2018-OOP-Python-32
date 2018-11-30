@@ -174,7 +174,7 @@ class Ui_MainWindow(QMainWindow, object):
         pixmap = pixmap.scaled(351, 251)
         self.label_15.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
-        self.lineEdit_17.setText("소고기 가격이 올랐습니다.")
+        self.lineEdit_17.setText("[5/8] 소고기 가격이 올랐습니다.")
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -219,14 +219,20 @@ class Ui_MainWindow(QMainWindow, object):
         self.pushButton_3.setText(_translate("MainWindow", "결정"))
 
     def btn_choice_clicked(self):
-        buy = int(self.lineEdit.text() + self.lineEdit_3.text() + self.lineEdit_5.text() + self.lineEdit_7.text() + self.lineEdit_9.text() + self.lineEdit_11.text() + self.lineEdit_13.text() + self.lineEdit_15.text())
-        sale = int(self.lineEdit_2.text() + self.lineEdit_4.text() + self.lineEdit_6.text() + self.lineEdit_8.text() + self.lineEdit_10.text() + self.lineEdit_12.text() + self.lineEdit_14.text() + self.lineEdit_16.text())
+        try:
+            buy = int(
+                self.lineEdit.text() + self.lineEdit_3.text() + self.lineEdit_5.text() + self.lineEdit_7.text() + self.lineEdit_9.text() + self.lineEdit_11.text() + self.lineEdit_13.text() + self.lineEdit_15.text())
+            sale = int(
+                self.lineEdit_2.text() + self.lineEdit_4.text() + self.lineEdit_6.text() + self.lineEdit_8.text() + self.lineEdit_10.text() + self.lineEdit_12.text() + self.lineEdit_14.text() + self.lineEdit_16.text())
 
-        if buy > 5:
-            QMessageBox.about(self, "Economic", "5개 초과로 살 수 없습니다.")
+            if buy > 5:
+                QMessageBox.about(self, "Economic", "5개 초과로 살 수 없습니다.")
 
-        if sale > 10:
-            QMessageBox.about(self, "Economic", "10개 초과로 팔 수 없습니다.")
+            if sale > 10:
+                QMessageBox.about(self, "Economic", "10개 초과로 팔 수 없습니다.")
+
+        except ValueError:
+            QMessageBox.about(self, "Economic", "0~10 범위 내로 값을 올바르게 입력하였는지 다시 확인해 주시기 바랍니다.")
 
         # else:
             # Dict 만들어 주고 서버로 전송하는 부분 추가
