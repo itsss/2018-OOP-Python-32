@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QPixmap
 import socket, threading
 # from mainwindow import Ui_MainWindow
 # Ref: https://stackoverflow.com/questions/11812000/login-dialog-pyqt
@@ -150,10 +151,30 @@ class Ui_MainWindow(QMainWindow, object):
         self.lineEdit_17 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_17.setGeometry(QtCore.QRect(90, 10, 271, 20))
         self.lineEdit_17.setObjectName("lineEdit_17")
+
+        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
+        self.scrollArea.setGeometry(QtCore.QRect(10, 40, 351, 251))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 349, 249))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.label_15 = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+        self.label_15.setGeometry(QtCore.QRect(0, 0, 351, 251))
+        self.label_15.setObjectName("label_15")
+
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
+        pixmap = QPixmap('image/beef_increase.png') # 이미지 구현
+        pixmap = pixmap.scaled(351, 251)
+        self.label_15.setPixmap(pixmap)
+        self.resize(pixmap.width(), pixmap.height())
+        self.lineEdit_17.setText("소고기 가격이 올랐습니다.")
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
