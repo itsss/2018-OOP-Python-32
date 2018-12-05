@@ -1,6 +1,5 @@
-#초고 서버
-import socket
-import threading
+# 초고 서버
+import socket, threading
 import random
 
 # 서버 주소, 포트
@@ -13,16 +12,16 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(address)
 server_socket.listen()
 
-#플레이어 목록, 최대 인원수
-client_list=[]
-client_score=[]
-max_per=2
+# 플레이어 목록, 최대 인원수
+client_list = []
+client_score = []
+max_per = 2 # 최대 인원
 
 def connection():
     global client_list
-    cnt=0
-    while cnt<max_per:
-        client_socket, client_address=server_socket.accept()
+    cnt = 0
+    while cnt < max_per:
+        client_socket, client_address = server_socket.accept()
         #client=[client_socket, client_address]
         #client_list.append(client)
         client_list.append(client_socket)
@@ -31,18 +30,18 @@ def connection():
         for i in client_list:
             print(str(client_list.index(i)+1)+". ", end="")
             print(i)
-        cnt=cnt+1
+        cnt = cnt + 1
 
 def send_num(client_socket):
-    num=random.randint(1,10)
-    b_num=str(num).encode('utf-8')
+    num = random.randint(1,10)
+    b_num = str(num).encode('utf-8')
     print(type(b_num))
     client_socket.send(b_num)
 
 def receive(client_socket):
     try:
-        data=client_socket.recv(1024)
-        if data==(b"exit"):
+        data = client_socket.recv(1024)
+        if data == (b"exit"):
             exit()
     except OSError:
         exit()
@@ -50,8 +49,10 @@ def receive(client_socket):
 
 connection()
 print(1)
+
 for i in client_list:
     send_num(i)
+    
 for i in client_list:
-    B=threading.Thread(target=receive, args=(i,))
+    B = threading.Thread(target=receive, args=(i,))
     B.start()
