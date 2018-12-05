@@ -2,7 +2,7 @@
 게임 시작 전:
  - 사용자가 방에 입장하는 경우 모든 플레이어에게 (접속한 플레이어 모두) 접속자 명단을 보냄
  - 최대인원이 찬 경우 더 이상 입장할 수 없도록(?)
- - 최대인원이 차면 20초 내 게임을 시작함 (time:20 등과 같이 모든 플레이어에게 남은 시간 메시지를 보냄)
+ - 최대인원이 차면 20초 내 게임을 시작함 (time:20 등과 같이 모든 플레이어에게 남은 시간 메시지를 보냄) - 5초 후 게임 시작 표현(완료)
 
 게임 시작 후:
  - 이후 입장하는 사용자는 방 입장을 제한함
@@ -19,9 +19,11 @@
 '''
 
 
-# 초고 서버
-import socket, threading
+#초고 서버
+import socket
+import threading
 import random
+import time
 
 # 서버 주소, 포트
 server_ip = '127.0.0.1'
@@ -33,16 +35,16 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(address)
 server_socket.listen()
 
-# 플레이어 목록, 최대 인원수
-client_list = []
-client_score = []
-max_per = 2 # 최대 인원
+#플레이어 목록, 최대 인원수
+client_list=[]
+client_score=[]
+max_per=2
 
 def connection():
     global client_list
-    cnt = 0
-    while cnt < max_per:
-        client_socket, client_address = server_socket.accept()
+    cnt=0
+    while cnt<max_per:
+        client_socket, client_address=server_socket.accept()
         #client=[client_socket, client_address]
         #client_list.append(client)
         client_list.append(client_socket)
@@ -51,29 +53,38 @@ def connection():
         for i in client_list:
             print(str(client_list.index(i)+1)+". ", end="")
             print(i)
-        cnt = cnt + 1
+        cnt=cnt+1
+    print("All player joined! Server is starting game...")
 
-def send_num(client_socket):
-    num = random.randint(1,10)
-    b_num = str(num).encode('utf-8')
-    print(type(b_num))
+#게임 시작을 플레이어에게 알림
+#5초 후 게임을 시작함
+def game_start(client):
+    client.send(b"All player joined! Server is starting game...")
+    for t in range(5,0,-1):
+        client.send(str(t).encode('utf-8'))
+        time.sleep(1)
+    client.send(b"start")
+
+def send_num(num, client_socket):
+    b_num=str(num).encode('utf-8')
     client_socket.send(b_num)
 
 def receive(client_socket):
     try:
-        data = client_socket.recv(1024)
-        if data == (b"exit"):
+        data=client_socket.recv(1024)
+        if data==(b"exit"):
             exit()
     except OSError:
         exit()
     print(data.decode('utf-8'))
 
 connection()
-print(1)
+#rand_num=random.randint(1,10)
+#send_num(rand_num, i)
 
 for i in client_list:
-    send_num(i)
-    
+    A=threading.Thread(target=game_start, args=(i,))
+    A.start()
 for i in client_list:
-    B = threading.Thread(target=receive, args=(i,))
+    B=threading.Thread(target=receive, args=(i,))
     B.start()
