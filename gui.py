@@ -17,9 +17,11 @@ class Connect(QtWidgets.QDialog):
         layout.addWidget(self.serverIP)
         layout.addWidget(self.buttonconn)
 
+
     def handleLogin(self):
         var = self.serverIP.text()
         serv = (str(var), 50000)
+        global sck
         sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         try:
@@ -31,6 +33,7 @@ class Connect(QtWidgets.QDialog):
             QMessageBox.about(self, "Economic", "서버 상태 / IP 주소를 확인하십시오.")
         except OSError:
             QMessageBox.about(self, "Economic", "서버 상태 / IP 주소를 확인하십시오.")
+
 
 class Ui_MainWindow(QMainWindow, object):
     def setupUi(self, MainWindow):
@@ -225,11 +228,21 @@ class Ui_MainWindow(QMainWindow, object):
             sale = int(
                 self.lineEdit_2.text() + self.lineEdit_4.text() + self.lineEdit_6.text() + self.lineEdit_8.text() + self.lineEdit_10.text() + self.lineEdit_12.text() + self.lineEdit_14.text() + self.lineEdit_16.text())
 
+            '''
+            5개 초과 사기, 10개 초과 팔기
+            음수 데이터, 정수가 아닌 데이터 입력 방지 코드
+            '''
+            
             if buy > 5:
                 QMessageBox.about(self, "Economic", "5개 초과로 살 수 없습니다.")
 
             if sale > 10:
                 QMessageBox.about(self, "Economic", "10개 초과로 팔 수 없습니다.")
+
+            if (int(self.lineEdit.text()) < 0 or int(self.lineEdit_3.text()) < 0 or int(self.lineEdit_5.text()) < 0 or int(self.lineEdit_7.text()) < 0 or int(self.lineEdit_9.text()) < 0 or int(self.lineEdit_11.text()) < 0 or int(self.lineEdit_13.text()) < 0 or int(self.lineEdit_15.text()) < 0) \
+                    or (int(self.lineEdit_2.text()) < 0 or int(self.lineEdit_4.text()) < 0 or int(self.lineEdit_6.text()) < 0 or int(self.lineEdit_8.text()) < 0 or int(self.lineEdit_10.text()) < 0 or int(self.lineEdit_12.text()) < 0 or int(self.lineEdit_14.text()) < 0 or int(self.lineEdit_16.text()) < 0):
+                QMessageBox.about(self, "Economic", "0~10 범위 내로 값을 올바르게 입력하였는지 다시 확인해 주시기 바랍니다.")
+
 
         except ValueError:
             QMessageBox.about(self, "Economic", "0~10 범위 내로 값을 올바르게 입력하였는지 다시 확인해 주시기 바랍니다.")
