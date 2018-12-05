@@ -43,13 +43,16 @@ for cnt in range(turns):
         price = lines[cnt]
         fw_text.write(price)
 
-        if price.split('(')[1].startswith('공급') == Ture:
-            # 공급... 다음시간에 마무리
+        tag = price.split('(')[1]
+        change = tag.split()[1]
+        if tag.startswith('수요 증가') or tag.startswith('공급 감소'):
+            fw_updown.write('가격 증가')
         else:
-          # 수요  
+            fw_updown.write('가격 감소')
         fr.close()
 
     fw_text.close()
+    fw_updown.close()
              
 def print_price_text(turns):
     '''
