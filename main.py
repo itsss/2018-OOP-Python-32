@@ -79,6 +79,8 @@ def read_price_text(val):
             break
         list.append([newline.split('|')[0], int(newline.split('|')[1]), int(newline.split('|')[2]), int(newline.split('|')[3])])
         # coffee-1 | 브라질이 최악의 가뭄을 경험하고 있다.| 공급 | image/coffee/drought.png
+
+    return list
        
 def print_ind_score():
     pass
