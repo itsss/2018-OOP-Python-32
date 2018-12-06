@@ -68,6 +68,17 @@ def print_price_text(turns):
         print(line)
     fr.close()
 
+def read_price_text(val):
+    # val: 아이템명 (beef, coffee, rare earth, etc...)
+    # ref: Millstone Project (oop-project-ex)
+    list = []
+    f = open('./news/'+str(val), 'r', encoding="UTF-8")
+    while True:
+        newline = f.readline()
+        if not newline:
+            break
+        list.append([newline.split('|')[0], int(newline.split('|')[1]), int(newline.split('|')[2]), int(newline.split('|')[3])])
+        # coffee-1 | 브라질이 최악의 가뭄을 경험하고 있다.| 공급 | image/coffee/drought.png
        
 def print_ind_score():
     pass
