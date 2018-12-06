@@ -5,34 +5,22 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QPixmap
 import socket, threading
 # from mainwindow import Ui_MainWindow
-# Ref: https://stackoverflow.com/questions/11812000/login-dialog-pyqt
 
-class Connect(QtWidgets.QDialog):
-    def __init__(self, parent=None):
-        super(Connect, self).__init__(parent)
-        self.serverIP = QtWidgets.QLineEdit(self)
-        self.buttonconn = QtWidgets.QPushButton('Connect', self)
-        self.buttonconn.clicked.connect(self.handleLogin)
-        layout = QtWidgets.QVBoxLayout(self)
-        layout.addWidget(self.serverIP)
-        layout.addWidget(self.buttonconn)
+import socket
 
+# 접속하고자 하는 서버의 주소 및 포트
+server_ip = '127.0.0.1'
+server_port = 60000
+address = (server_ip, server_port)
 
-    def handleLogin(self):
-        var = self.serverIP.text()
-        serv = (str(var), 50000)
-        global sck
-        sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# socket을 이용해서 접속 할 준비
+mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+try:
+    mysock.connect(address)  # 서버에 접속
 
-        try:
-            sck.settimeout(5)
-            sck.connect(serv)
-            self.accept()
-
-        except ConnectionRefusedError:
-            QMessageBox.about(self, "Economic", "서버 상태 / IP 주소를 확인하십시오.")
-        except OSError:
-            QMessageBox.about(self, "Economic", "서버 상태 / IP 주소를 확인하십시오.")
+except ConnectionRefusedError:
+    print('서버 상태 / IP 주소를 확인하십시오.')
+    exit()
 
 
 class Ui_MainWindow(QMainWindow, object):
@@ -232,7 +220,7 @@ class Ui_MainWindow(QMainWindow, object):
             5개 초과 사기, 10개 초과 팔기
             음수 데이터, 정수가 아닌 데이터 입력 방지 코드
             '''
-            
+
             if buy > 5:
                 QMessageBox.about(self, "Economic", "5개 초과로 살 수 없습니다.")
 
@@ -269,14 +257,10 @@ class Window(QMainWindow):
 
 if __name__ == '__main__':
     import sys
-    app = QtWidgets.QApplication(sys.argv)
-    conn = Connect()
 
-    if conn.exec_() == QtWidgets.QDialog.Accepted:
-        # window = Window()
-        # window.show()
-        MainWindow = QtWidgets.QMainWindow()
-        ui = Ui_MainWindow()
-        ui.setupUi(MainWindow)
-        MainWindow.show()
-        sys.exit(app.exec_())
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
