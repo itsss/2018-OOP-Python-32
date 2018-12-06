@@ -19,7 +19,8 @@
 '''
 
 
-#초고 서버
+#방 최대 인원 추가
+#채팅 기능 추가 - 현재 작업중
 import socket
 import threading
 import random
@@ -39,21 +40,53 @@ server_socket.listen()
 client_list=[]
 client_score=[]
 max_per=2
+cnt=0
 
+#플레이어로부터 데이터를 받아 나머지에게 전송
+def chat(client_socket):
+    global client_list
+    global cnt
+
+    while cnt<max_per:
+        try:
+            data=client_socket.recv(1024)
+            if data.decode('utf-8')=="exit":
+                print("{} disconnect".format(client_socket))
+                cnt=cnt-1
+                break
+        except KeyboardInterrupt:
+            break
+        except ConnectionError:
+            break
+        for i in client_list:
+            print(i)
+            i.send(data)
+    client_socket.close()
+    client_list.remove(client_socket)
+
+#플레이어의 연결을 수행
 def connection():
     global client_list
-    cnt=0
+    global cnt
+
     while cnt<max_per:
         client_socket, client_address=server_socket.accept()
         #client=[client_socket, client_address]
         #client_list.append(client)
         client_list.append(client_socket)
+        client_socket.send(b"Welcome to economic server!")
+        client_socket.send(b"If you want to exit, try \"exit\".")
+
+        cnt = cnt + 1
+
         print("Connected from {}".format(client_address))
         print("Now players are")
         for i in client_list:
             print(str(client_list.index(i)+1)+". ", end="")
             print(i)
-        cnt=cnt+1
+
+        Ch=threading.Thread(target=chat, args=(client_socket,))
+        Ch.start()
     print("All player joined! Server is starting game...")
 
 #게임 시작을 플레이어에게 알림
@@ -76,7 +109,7 @@ def receive(client_socket):
             exit()
     except OSError:
         exit()
-    print(data.decode('utf-8'))
+    print("{}: ".format(client_socket)+data.decode('utf-8'))
 
 connection()
 #rand_num=random.randint(1,10)
@@ -86,5 +119,6 @@ for i in client_list:
     A=threading.Thread(target=game_start, args=(i,))
     A.start()
 for i in client_list:
-    B=threading.Thread(target=receive, args=(i,))
-    B.start()
+    Re=threading.Thread(target=receive, args=(i,))
+    Re.start()
+
