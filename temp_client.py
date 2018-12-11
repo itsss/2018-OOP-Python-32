@@ -13,7 +13,9 @@ mysock.connect(address)  # 서버에 접속
 
 #입력받아 서버에 전송하는 함수 / 채팅함수
 #에러 코드
-#exit를 입력하면 정상적으로 스레딩이 종료되야 함. 현재는 스크롤이 무한히 내려가는 중
+#exit를 입력하면 정상적으로 스레딩이 종료되야 함.
+#input()을 실행하면 프로세스가 정지하는 것을 발견.
+
 def chat(mysocket):
     while True:
         try:
