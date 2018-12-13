@@ -1,8 +1,9 @@
 '''
 게임 시작 전:
  - 사용자가 방에 입장하는 경우 모든 플레이어에게 (접속한 플레이어 모두) 접속자 명단을 보냄
- - 최대인원이 찬 경우 더 이상 입장할 수 없도록(?)
+ - 최대인원이 찬 경우 더 이상 입장할 수 없도록(?) - 최대 인원수 제한을 둠으로서 해결
  - 최대인원이 차면 20초 내 게임을 시작함 (time:20 등과 같이 모든 플레이어에게 남은 시간 메시지를 보냄) - 5초 후 게임 시작 표현(완료)
+ * 채팅 기능 추가
 
 게임 시작 후:
  - 이후 입장하는 사용자는 방 입장을 제한함
@@ -19,6 +20,7 @@
 '''
 
 
+#초고 서버
 #방 최대 인원 추가
 #채팅 기능 추가 - 현재 작업중
 import socket
@@ -39,30 +41,42 @@ server_socket.listen()
 #플레이어 목록, 최대 인원수
 client_list=[]
 client_score=[]
-max_per=2
+max_per=8
 cnt=0
 
 #플레이어로부터 데이터를 받아 나머지에게 전송
-def chat(client_socket):
+def server_chat(client_socket):
     global client_list
     global cnt
-
+    
+    #접속 종료 여부 확인 변수
+    impos=0
     while cnt<max_per:
         try:
             data=client_socket.recv(1024)
+            #만약 "exit"을 받으면 접속 종료 표기
             if data.decode('utf-8')=="exit":
                 print("{} disconnect".format(client_socket))
-                cnt=cnt-1
+                impos=1
                 break
+        #오류가 날 경우 접속 종료 표기
         except KeyboardInterrupt:
+            impos=1
             break
         except ConnectionError:
+            impos=1
             break
+        #받은 데이터 / 채팅을 나를 제외한 플레이어에게 전송
         for i in client_list:
-            print(i)
-            i.send(data)
-    client_socket.close()
-    client_list.remove(client_socket)
+            if not i==client_socket:
+                print(i)
+                i.send(data)
+    #만약 접속 종료 표기가 있으면 소켓을 닫는다.
+    if impos:
+        cnt=cnt-1
+        client_socket.close()
+        client_list.remove(client_socket)
+        print("{} has disconnected".format(client_socket))
 
 #플레이어의 연결을 수행
 def connection():
@@ -74,19 +88,19 @@ def connection():
         #client=[client_socket, client_address]
         #client_list.append(client)
         client_list.append(client_socket)
-        client_socket.send(b"Welcome to economic server!")
+        client_socket.send(b"Welcome to economic server!\n")
         client_socket.send(b"If you want to exit, try \"exit\".")
 
         cnt = cnt + 1
 
         print("Connected from {}".format(client_address))
-        print("Now players are")
+        print("Now %d players join. List:" %cnt)
         for i in client_list:
             print(str(client_list.index(i)+1)+". ", end="")
             print(i)
 
-        Ch=threading.Thread(target=chat, args=(client_socket,))
-        Ch.start()
+        Se=threading.Thread(target=server_chat, args=(client_socket,))
+        Se.start()
     print("All player joined! Server is starting game...")
 
 #게임 시작을 플레이어에게 알림
