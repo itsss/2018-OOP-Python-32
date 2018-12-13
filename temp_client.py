@@ -11,27 +11,12 @@ address = (server_ip, server_port)
 mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 mysock.connect(address)  # 서버에 접속
 
-#입력받아 서버에 전송하는 함수 / 채팅함수
-#에러 코드
-#exit를 입력하면 정상적으로 스레딩이 종료되야 함.
-#input()을 실행하면 프로세스가 정지하는 것을 발견.
+cnt_now=1
 
-def chat(mysocket):
-    while True:
-        try:
-            w=input()
-            mysocket.send(w.encode('utf-8'))
-            if w=='exit':
-                break
-        except OSError:
-            print("Error!")
-            mysocket.close()
-            break
-
+#서버로부터 데이터를 받는 함수
+#start를 전송받으면 게임을 시작 / 함수를 종료
 def ready():
-    Ch=threading.Thread(target=chat, args=(mysock,))
-    Ch.start()
-    while True:
+    while True and cnt_now:
         try:
             data=mysock.recv(1024)
         except OSError:
@@ -40,6 +25,28 @@ def ready():
         if data.decode('utf-8')=="start":
             break
 
-ready()
-now=input()
-mysock.send(now.encode('utf-8'))
+#입력받아 서버에 전송하는 함수 / 채팅함수
+def client_chat(mysocket):
+    #스레드로 데이터 받는 함수 실행
+    Re=threading.Thread(target=ready, args=())
+    Re.start()
+    #스레드 탈출 변수
+    # exit를 입력하면 탈출
+    while cnt_now:
+        try:
+            w=input()
+            if w=='exit':
+                break
+        except KeyboardInterrupt:
+            print("Error!")
+            break
+        except OSError:
+            print("Error!")
+            break
+        mysocket.send(w.encode('utf-8'))
+
+    mysock.close()
+    print("You get out from server.")
+
+
+client_chat(mysock)
