@@ -235,9 +235,9 @@ class Ui_MainWindow(QMainWindow, object):
     def btn_choice_clicked(self):
         try:
             buy = int(
-                self.lineEdit.text() + self.lineEdit_3.text() + self.lineEdit_5.text() + self.lineEdit_7.text() + self.lineEdit_9.text() + self.lineEdit_11.text() + self.lineEdit_13.text() + self.lineEdit_15.text())
+                int(self.lineEdit.text()) + int(self.lineEdit_3.text()) + int(self.lineEdit_5.text()) + int(self.lineEdit_7.text()) + int(self.lineEdit_9.text()) + int(self.lineEdit_11.text()) + int(self.lineEdit_13.text()) + int(self.lineEdit_15.text()))
             sale = int(
-                self.lineEdit_2.text() + self.lineEdit_4.text() + self.lineEdit_6.text() + self.lineEdit_8.text() + self.lineEdit_10.text() + self.lineEdit_12.text() + self.lineEdit_14.text() + self.lineEdit_16.text())
+                int(self.lineEdit_2.text()) + int(self.lineEdit_4.text()) + int(self.lineEdit_6.text()) + int(self.lineEdit_8.text()) + int(self.lineEdit_10.text()) + int(self.lineEdit_12.text()) + int(self.lineEdit_14.text()) + int(self.lineEdit_16.text()))
 
             '''
             5개 초과 사기, 10개 초과 팔기
@@ -250,20 +250,35 @@ class Ui_MainWindow(QMainWindow, object):
             if sale > 10:
                 QMessageBox.about(self, "Economic", "10개 초과로 팔 수 없습니다.")
 
-            if (int(self.lineEdit.text()) < 0 or int(self.lineEdit_3.text()) < 0 or int(self.lineEdit_5.text()) < 0 or int(self.lineEdit_7.text()) < 0 or int(self.lineEdit_9.text()) < 0 or int(self.lineEdit_11.text()) < 0 or int(self.lineEdit_13.text()) < 0 or int(self.lineEdit_15.text()) < 0) \
-                    or (int(self.lineEdit_2.text()) < 0 or int(self.lineEdit_4.text()) < 0 or int(self.lineEdit_6.text()) < 0 or int(self.lineEdit_8.text()) < 0 or int(self.lineEdit_10.text()) < 0 or int(self.lineEdit_12.text()) < 0 or int(self.lineEdit_14.text()) < 0 or int(self.lineEdit_16.text()) < 0):
-                QMessageBox.about(self, "Economic", "0~10 범위 내로 값을 올바르게 입력하였는지 다시 확인해 주시기 바랍니다.")
-
-
         except ValueError:
             QMessageBox.about(self, "Economic", "0~10 범위 내로 값을 올바르게 입력하였는지 다시 확인해 주시기 바랍니다.")
 
-        # else:
-            # Dict 만들어 주고 서버로 전송하는 부분 추가
-            # mysock.send(bytes(data, 'UTF-8'))
+        else:
+            if (int(self.lineEdit.text()) < 0 or int(self.lineEdit_3.text()) < 0 or int(
+                    self.lineEdit_5.text()) < 0 or int(self.lineEdit_7.text()) < 0 or int(
+                    self.lineEdit_9.text()) < 0 or int(self.lineEdit_11.text()) < 0 or int(
+                    self.lineEdit_13.text()) < 0 or int(self.lineEdit_15.text()) < 0) \
+                    or (int(self.lineEdit_2.text()) < 0 or int(self.lineEdit_4.text()) < 0 or int(
+                        self.lineEdit_6.text()) < 0 or int(self.lineEdit_8.text()) < 0 or int(
+                        self.lineEdit_10.text()) < 0 or int(self.lineEdit_12.text()) < 0 or int(
+                        self.lineEdit_14.text()) < 0 or int(self.lineEdit_16.text()) < 0):
+                QMessageBox.about(self, "Economic", "0~10 범위 내로 값을 올바르게 입력하였는지 다시 확인해 주시기 바랍니다.")
 
+            else:
+                # Dict 만들어 주고 서버로 전송하는 부분 추가
+                data = "SEND/" + str(self.lineEdit.text()) + ":" + str(self.lineEdit_2.text()) + "/" + str(
+                    self.lineEdit_3.text()) + ":" + str(self.lineEdit_4.text()) + "/" + str(
+                    self.lineEdit_5.text()) + ":" + str(self.lineEdit_6.text()) + "/" + str(
+                    self.lineEdit_7.text()) + ":" + str(self.lineEdit_8.text()) + "/" + str(
+                    self.lineEdit_9.text()) + ":" + str(self.lineEdit_10.text()) + "/" + str(
+                    self.lineEdit_11.text()) + ":" + str(self.lineEdit_12.text()) + "/" + str(
+                    self.lineEdit_13.text()) + ":" + str(self.lineEdit_14.text()) + "/" + str(
+                    self.lineEdit_15.text()) + ":" + str(self.lineEdit_16.text())
+                QMessageBox.about(self, "Economic", data)
+                # {'커피': 5, '밀가루': 5, '희토류': 5, '석유': 5, '소고기': 5, '시멘트': 5, '알루미늄': 5, '강철': 5}
+                mysock.send(bytes(data, 'UTF-8'))
 
-        # print(self.lineEdit.text())
+                # print(self.lineEdit.text())
         # print(self.lineEdit_3.text())
         # print(self.lineEdit_5.text())
         # print(self.lineEdit_7.text())
