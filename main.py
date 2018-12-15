@@ -16,7 +16,7 @@ def get_price_change(item_list):
     1. 물건 시세 변동여부와 공급/수요 여부 텍스트 파일
     2. 가격 변동 여부(-1/1) 파일 만들기
     '''
-gloabal turns
+global turns
 
 flist = os.listdir('price_data')
 
