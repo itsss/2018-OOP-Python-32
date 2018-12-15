@@ -232,6 +232,51 @@ class Ui_MainWindow(QMainWindow, object):
 
         mysock.close()
 
+    def read_price_text(self, val):
+        # val: 아이템명 (beef, coffee, rare earth, etc...)
+        # ref: Millstone Project (oop-project-ex)
+        id = []
+        description = []
+        sd = []
+        image = []
+        f = open('./news/' + str(val), 'r', encoding="UTF-8")
+        while True:
+            newline = f.readline()
+            if not newline:
+                break
+            id.append(newline.split('|')[0])
+            description.append(newline.split('|')[1])
+            sd.append(newline.split('|')[2])
+            image.append(newline.split('|')[3])
+            # coffee-1 | 브라질이 최악의 가뭄을 경험하고 있다.| 공급 | image/coffee/drought.png
+
+        return id, description, sd, image
+
+    def test_image_view(self, srv_val):
+        # [11, 22, 33, 44, 51, 61, 71, 81] 형태로 이미지 번호가 리스트로 들어옴
+        a,b,c,d = self.read_price_text('any')
+
+        test_image_link=[]
+
+        for i in range(8): # 아이템 개수
+            for j in range(5): # 이미지 개수
+                loc = i*5+j  # 정해진 배열을 찾아갈 수 있도록 (ex. 11번 그림이면 0번지로 가도록)
+                if a[loc] == srv_val[i]:  # for문 그림번호와 리스트에 들어있었던 번호가 같다면
+                    test_image_link.append(d[loc])
+
+        # for i in range(8):
+        #     pixmap = QPixmap(test_image_link[i])  # 이미지 구현
+        #     pixmap = pixmap.scaled(351, 251)
+        #     self.label_15.setPixmap(pixmap)
+        #     self.resize(pixmap.width(), pixmap.height())
+        #     self.lineEdit_17.setText("[5/8] 소고기 가격이 올랐습니다.")
+
+        '''
+        추후 보완사항
+
+        왼쪽 오른쪽 버튼을 눌렀을 때 바뀌도록 제작하기
+        '''
+
     def btn_choice_clicked(self):
         try:
             buy = int(
