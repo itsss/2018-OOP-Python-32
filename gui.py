@@ -3,14 +3,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QLineEdit, QMessageBox
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QPixmap
-import socket, threading
+import socket
+from threading import Thread
+from PyQt5.QtGui import QStandardItemModel
+from PyQt5.QtGui import QStandardItem
+
 # from mainwindow import Ui_MainWindow
 
-import socket
+cnt_now=1
 
 # 접속하고자 하는 서버의 주소 및 포트
 server_ip = '127.0.0.1'
-server_port = 60000
+server_port = 60003
 address = (server_ip, server_port)
 
 # socket을 이용해서 접속 할 준비
@@ -19,11 +23,15 @@ try:
     mysock.connect(address)  # 서버에 접속
 
 except ConnectionRefusedError:
-    print('서버 상태 / IP 주소를 확인하십시오.')
+    print('서버 상태를 확인하십시오.')
     exit()
 
+Model = QStandardItemModel()
 
 class Ui_MainWindow(QMainWindow, object):
+    # 서버로부터 데이터를 받는 함수
+    # start를 전송받으면 게임을 시작 / 함수를 종료
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(620, 506)
@@ -161,7 +169,7 @@ class Ui_MainWindow(QMainWindow, object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-        pixmap = QPixmap('image/beef_increase.png') # 이미지 구현
+        pixmap = QPixmap('image/beef/cow_price_increase.png') # 이미지 구현
         pixmap = pixmap.scaled(351, 251)
         self.label_15.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
@@ -208,6 +216,21 @@ class Ui_MainWindow(QMainWindow, object):
         self.lineEdit_16.setText(_translate("MainWindow", "0"))
 
         self.pushButton_3.setText(_translate("MainWindow", "결정"))
+
+    def receive(self):
+        global mysock, Model
+
+        while True:
+            try:
+                data = mysock.recv(1024)
+                Model.appendRow(QStandardItem(data.decode('UTF-8')))
+                self.listView_2.setModel(Model)
+
+            except OSError:
+                print('연결이 종료되었습니다.')
+                break
+
+        mysock.close()
 
     def btn_choice_clicked(self):
         try:
@@ -262,5 +285,7 @@ if __name__ == '__main__':
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
+    thread_recv = Thread(target=ui.receive, args=())
+    thread_recv.start()
     MainWindow.show()
     sys.exit(app.exec_())
