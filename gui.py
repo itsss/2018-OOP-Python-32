@@ -260,6 +260,7 @@ class Ui_MainWindow(QMainWindow, object):
 
         # else:
             # Dict 만들어 주고 서버로 전송하는 부분 추가
+            # mysock.send(bytes(data, 'UTF-8'))
 
 
         # print(self.lineEdit.text())
