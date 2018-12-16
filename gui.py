@@ -253,9 +253,6 @@ class Ui_MainWindow(QMainWindow, object):
                 # print(data)
 
             # 오류수정 ref: https://github.com/kadragon/oop_python_ex/blob/master/study_ex/16_socket/1603_socket_client.py
-            except OSError:
-                print('연결이 종료되었습니다.')
-                break
 
             except ConnectionError:
                 print("서버와 접속이 끊겼습니다. Enter를 누르세요.")
