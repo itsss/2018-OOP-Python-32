@@ -10,4 +10,6 @@ pip3를 이용하여 PyQt5를 설치합니다.
 ### 서버 실행방법
  > python3 server.py
 ### 클라이언트(GUI) 실행방법
+실행 전, 반드시 IP와 포트주소를 파일에 명시해 주어야 합니다.
+
  > python3 gui.py
