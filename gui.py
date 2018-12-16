@@ -454,16 +454,7 @@ class Ui_MainWindow(QMainWindow, object):
                     self.lineEdit_15.text()) + ":" + str(self.lineEdit_16.text())
                 QMessageBox.about(self, "Economic", data)
                 # {'커피': 5, '밀가루': 5, '희토류': 5, '석유': 5, '소고기': 5, '시멘트': 5, '알루미늄': 5, '강철': 5}
-                # mysock.send(bytes(data, 'UTF-8'))
-
-                # print(self.lineEdit.text())
-        # print(self.lineEdit_3.text())
-        # print(self.lineEdit_5.text())
-        # print(self.lineEdit_7.text())
-        # print(self.lineEdit_9.text())
-        # print(self.lineEdit_11.text())
-        # print(self.lineEdit_13.text())
-        # print(self.lineEdit_15.text())
+                mysock.send(bytes(data, 'UTF-8'))  # 서버에 메시지를 전송
 
 
 class Window(QMainWindow):
