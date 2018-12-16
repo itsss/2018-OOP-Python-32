@@ -1,6 +1,9 @@
 # 2018-2 객체지향 프로그래밍 프로젝트 - **(economic)**
 구성원: 2-2 강태원 | 2-6 오은제 | 2-1 윤성민
 
+## 프로그램 실행 방법 바로가기
+- [프로그램 실행 방법](https://github.com/itsss/2018-OOP-Python-economic/blob/master/CODE_USAGE.md)
+
 ## 1. 주제
 본 프로그램은 수요 및 공급 변동의 요인을 배울 수 있는 Python 게임이다.
 
