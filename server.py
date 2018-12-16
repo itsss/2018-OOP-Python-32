@@ -36,7 +36,7 @@ import time
 
 # 서버 주소, 포트
 server_ip = '127.0.0.1'
-server_port = 60037
+server_port = 60043
 address = (server_ip, server_port)
 
 # 서버 연결 대기
@@ -193,10 +193,10 @@ def update_value(bef, cha):
 def random_price(p, q):
     min_val=1
     max_val=5
-    if q<0:
+    if q < 0:
         if p==1:
             return 0
-        max_val=min(p-1, max_val)
+        max_val = min(p-1, max_val)
     change=random.randint(min_val,max_val)
     return change*q
 
@@ -216,10 +216,9 @@ def turn():
     price_change=[]
     #변경되는 가격 리스트
     for i in range(0,8):
-        price_change.append(random_price(now_type_list[i][0], now_type_list[i][1]))
-        print(price_change)
+        price_change.append(random_price(price[i], now_type_list[i][1]))
     #가격 변경
-    for i in range(0,max_per):
+    for i in range(0,8):
         price[i]=price[i]+price_change[i]
 
     #클라이언트에게서 받는 사고 판 리스트
@@ -233,7 +232,7 @@ def turn():
         #시세표
         now_price="PRICE|"
         for j in range(0,8):
-            now_price=now_price+str(price[j])+"/"
+            now_price += str(price[j])+"/"
         i.send(now_price.encode('utf-8'))
         #수익
 
@@ -244,11 +243,10 @@ def turn():
         sn_data = "PL|"+str(p)
         client_list[i].send(sn_data.encode('utf-8'))
         #최종 수익 변경
-
-    time.sleep(0.5)
+        time.sleep(0.5)
 
     for j in range(0, max_per):
-        client_score[j] = client_score[j] + price_change[j]
+        client_score[j] += price_change[j]
 
     max_list=sorted(client_score)
     max_list.reverse()
@@ -257,7 +255,7 @@ def turn():
         #점수 클라이언트에게 보내기
         for j in range(0,max_per):
             i.send(str(max_list[j]).encode('utf-8'))
-
+            time.sleep(0.5)
 connection()
 # rand_num=random.randint(1,10)
 # send_num(rand_num, i)
@@ -270,3 +268,11 @@ turn_cnt=0
 while turn_cnt<5:
     turn()
     turn_cnt=turn_cnt+1
+
+score = 'END|'
+for i in range(0, max_per):
+    score += str(client_score[i]) + '/'
+
+for i in client_list:
+    i.send(score.encode('utf-8'))
+
