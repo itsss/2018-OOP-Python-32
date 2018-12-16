@@ -15,7 +15,7 @@ loc = 0  # 이미지 보이는 위치 확인용
 
 # 접속하고자 하는 서버의 주소 및 포트
 server_ip = '127.0.0.1'
-server_port = 60007
+server_port = 60000
 address = (server_ip, server_port)
 
 # socket을 이용해서 접속 할 준비
@@ -250,66 +250,82 @@ class Ui_MainWindow(QMainWindow, object):
             try:
                 re = mysock.recv(1024)
                 data = re.decode('UTF-8')
-                print(data)
+                # print(data)
 
-                if data[:11] == 'PLAYER_JOIN':  # 게임 시작 전
-                    data2 = str(data[12] + '이 입장하였습니다.')
-                    Model.appendRow(QStandardItem(data2))
-                    self.listView_2.setModel(Model)
-
-                elif data[:11] == 'PLAYER_QUIT':
-                    data2 = str(data[12] + '이 퇴장하였습니다.')
-                    Model.appendRow(QStandardItem(data2))
-                    self.listView_2.setModel(Model)
-
-                elif data[:4] == 'DATA':
-                    # [11, 22, 33, 44, 55, 65, 75, 85] 형식으로 저장
-                    pic = list(map(int, data[5:].split("/")))
-                    pic_a, pic_b, pic_c = self.test_image_view(pic)
-
-                elif data[:5] == 'PRICE':  # 각 턴마다 아이템의 가격 및 플레이어별 서로의 손익 정보
-                    price = list(map(int, data[6:].split("/")))
-                    item = ['소고기', '커피', '희토류', '밀가루', '시멘트', '알루미늄', '강철', '석유']
-                    Model.appendRow(QStandardItem("=======현재 시세======="))
-                    cnt = 0
-                    for i in item:
-                        Model.appendRow(QStandardItem(str(i) + ': '+ str(price[cnt])))
-                        cnt += 1
-                    self.listView_2.setModel(Model)
-
-                elif data[:2] == 'PL':  # 플레이어별 서로의 손익 정보
-                    score = list(map(int, data[3:].split("/")))
-                    Model.appendRow(QStandardItem("=======플레이어별 손익 정보======="))
-                    cnt = 0
-                    for i in score:
-                        cnt += 1
-                        Model.appendRow(QStandardItem('플레이어 ' + str(cnt) + ': ' + str(i)))
-                    self.listView_2.setModel(Model)
-
-                elif data[:3] == 'END':  # 게임이 종료된 후, 누적 수익이 가장 높은 사람 및 순위 출력
-                    player = list(map(int, data[4:].split("/")))
-                    Model.appendRow(QStandardItem("=======게임 끝: 최종손익 정보======="))
-                    cnt = 0
-                    max = 0
-                    maxp = 0
-                    for i in player:
-                        cnt += 1
-                        Model.appendRow(QStandardItem('플레이어 ' + str(cnt) + ': ' + str(i)))
-                        if int(i) > max:
-                            max = i
-                            maxp = cnt
-                    Model.appendRow(QStandardItem('플레이어 ' + str(maxp) + '님이 ' + str(max) + '점으로 1등입니다!'))
-                    self.listView_2.setModel(Model)
-
-                else:
-                    Model.appendRow(QStandardItem(data))
-                    self.listView_2.setModel(Model)
-
+            # 오류수정 ref: https://github.com/kadragon/oop_python_ex/blob/master/study_ex/16_socket/1603_socket_client.py
             except OSError:
                 print('연결이 종료되었습니다.')
                 break
 
-        mysock.close()
+            except ConnectionError:
+                print("서버와 접속이 끊겼습니다. Enter를 누르세요.")
+                break
+            except OSError:
+                print("서버와의 접속을 끊었습니다.")
+                break
+
+            if not data:  # 넘어온 데이터가 없다면.. 로그아웃!
+                print("서버로부터 정상적으로 로그아웃했습니다.")
+                break
+
+            if data[:11] == 'PLAYER_JOIN':  # 게임 시작 전
+                data2 = str(data[12] + '이 입장하였습니다.')
+                Model.appendRow(QStandardItem(data2))
+                self.listView_2.setModel(Model)
+
+            elif data[:11] == 'PLAYER_QUIT':
+                data2 = str(data[12] + '이 퇴장하였습니다.')
+                Model.appendRow(QStandardItem(data2))
+                self.listView_2.setModel(Model)
+
+            elif data[:4] == 'DATA':
+                # [11, 22, 33, 44, 55, 65, 75, 85] 형식으로 저장
+                pic = list(map(int, data[5:].split("/")))
+                pic_a, pic_b, pic_c = self.test_image_view(pic)
+
+            elif data[:5] == 'PRICE':  # 각 턴마다 아이템의 가격 및 플레이어별 서로의 손익 정보
+                price = list(map(int, data[6:].split("/")))
+                item = ['소고기', '커피', '희토류', '밀가루', '시멘트', '알루미늄', '강철', '석유']
+                Model.appendRow(QStandardItem("=======현재 시세======="))
+                cnt = 0
+                for i in item:
+                    Model.appendRow(QStandardItem(str(i) + ': ' + str(price[cnt])))
+                    cnt += 1
+                self.listView_2.setModel(Model)
+
+            elif data[:2] == 'PL':  # 플레이어별 서로의 손익 정보
+                score = list(map(int, data[3:].split("/")))
+                Model.appendRow(QStandardItem("=======플레이어별 손익 정보======="))
+                cnt = 0
+                for i in score:
+                    cnt += 1
+                    Model.appendRow(QStandardItem('플레이어 ' + str(cnt) + ': ' + str(i)))
+                self.listView_2.setModel(Model)
+
+            elif data[:3] == 'END':  # 게임이 종료된 후, 누적 수익이 가장 높은 사람 및 순위 출력
+                player = list(map(int, data[4:].split("/")))
+                Model.appendRow(QStandardItem("=======게임 끝: 최종손익 정보======="))
+                cnt = 0
+                max = 0
+                maxp = 0
+                for i in player:
+                    cnt += 1
+                    Model.appendRow(QStandardItem('플레이어 ' + str(cnt) + ': ' + str(i)))
+                    if int(i) > max:
+                        max = i
+                        maxp = cnt
+                Model.appendRow(QStandardItem('플레이어 ' + str(maxp) + '님이 ' + str(max) + '점으로 1등입니다!'))
+                self.listView_2.setModel(Model)
+
+            else:
+                Model.appendRow(QStandardItem(data))
+                self.listView_2.setModel(Model)
+
+        print('소켓의 읽기 버퍼를 닫습니다.')
+        try:
+            mysock.shutdown(socket.SHUT_RD)
+        except OSError:
+            print("읽기 버퍼를 닫기 전에 서버에서 연결이 종료되었습니다.")
 
     def read_price_text(self, val):
         # val: 아이템명 (beef, coffee, rare earth, etc...)
@@ -457,11 +473,7 @@ class Ui_MainWindow(QMainWindow, object):
                 try:
                     mysock.send(bytes(data, 'UTF-8'))  # 서버에 메시지를 전송
                 except OSError:
-                    QMessageBox.about(self, "Economic", "서버 연결이 종료되었습니다. 게임을 종료합니다.")
-                    exit(1)
-                except ConnectionRefusedError:
-                    QMessageBox.about(self, "Economic", "서버 연결이 종료되었습니다. 게임을 종료합니다.")
-                    exit(1)
+                    exit()
 
 
 class Window(QMainWindow):
