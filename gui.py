@@ -11,11 +11,13 @@ loc = 0  # 이미지 보이는 위치 확인용
 
 # 접속하고자 하는 서버의 주소 및 포트 기술
 server_ip = '127.0.0.1'
-server_port = 60000
+server_port = 60037
 address = (server_ip, server_port)
 
 # socket을 이용해서 접속 할 준비
 mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+item = [5,5,5,5,5,5,5,5]
 
 # 서버에 접속을 시도
 try:
@@ -287,19 +289,10 @@ class Ui_MainWindow(QMainWindow, object):
                 self.listView_2.setModel(Model)
 
             elif data[:4] == 'DATA':  # 이미지 데이터가 들어오는 경우 처리하는 함수
+                print(data)
                 # [11, 22, 33, 44, 55, 65, 75, 85] 형식으로 저장
-                pic = list(map(int, data[5:].split("/")))
+                pic = list(map(int, data[5:-1].split("/")))
                 pic_a, pic_b, pic_c = self.test_image_view(pic)
-
-            elif data[:5] == 'PRICE':  # 각 턴마다의 아이템의 가격 (현재 시세)
-                price = list(map(int, data[6:].split("/")))
-                item = ['소고기', '커피', '희토류', '밀가루', '시멘트', '알루미늄', '강철', '석유']
-                Model.appendRow(QStandardItem("=======현재 시세======="))
-                cnt = 0
-                for i in item:
-                    Model.appendRow(QStandardItem(str(i) + ': ' + str(price[cnt])))
-                    cnt += 1
-                self.listView_2.setModel(Model)
 
             elif data[:2] == 'PL':  # 플레이어별 서로의 손익 정보
                 score = list(map(int, data[3:].split("/")))
@@ -308,6 +301,16 @@ class Ui_MainWindow(QMainWindow, object):
                 for i in score:
                     cnt += 1
                     Model.appendRow(QStandardItem('플레이어 ' + str(cnt) + ': ' + str(i)))
+                self.listView_2.setModel(Model)
+
+            elif data[:5] == 'PRICE':  # 각 턴마다의 아이템의 가격 (현재 시세)
+                price = list(map(int, data[6:-1].split("/")))
+                item = ['소고기', '커피', '희토류', '밀가루', '시멘트', '알루미늄', '강철', '석유']
+                Model.appendRow(QStandardItem("=======현재 시세======="))
+                cnt = 0
+                for i in item:
+                    Model.appendRow(QStandardItem(str(i) + ': ' + str(price[cnt])))
+                    cnt += 1
                 self.listView_2.setModel(Model)
 
             elif data[:3] == 'END':  # 게임이 종료된 후, 누적 수익이 가장 높은 사람 및 순위 출력
@@ -461,19 +464,19 @@ class Ui_MainWindow(QMainWindow, object):
             sale = int(
                 int(self.lineEdit_2.text()) + int(self.lineEdit_4.text()) + int(self.lineEdit_6.text()) + int(self.lineEdit_8.text()) + int(self.lineEdit_10.text()) + int(self.lineEdit_12.text()) + int(self.lineEdit_14.text()) + int(self.lineEdit_16.text()))
 
-            '''
-            5개 초과 사기, 10개 초과 팔기
-            음수 데이터, 정수가 아닌 데이터 입력 방지 코드
-            '''
-
-            if buy > 5:
-                QMessageBox.about(self, "Economic", "5개 초과로 살 수 없습니다.")
-
-            if sale > 10:
-                QMessageBox.about(self, "Economic", "10개 초과로 팔 수 없습니다.")
-
         except ValueError:
             QMessageBox.about(self, "Economic", "0~10 범위 내로 값을 올바르게 입력하였는지 다시 확인해 주시기 바랍니다.")
+
+        '''
+        5개 초과 사기, 10개 초과 팔기
+        음수 데이터, 정수가 아닌 데이터 입력 방지 코드
+        '''
+
+        if buy > 5:
+            QMessageBox.about(self, "Economic", "5개 초과로 살 수 없습니다.")
+
+        elif sale > 10:
+            QMessageBox.about(self, "Economic", "10개 초과로 팔 수 없습니다.")
 
         else:
             if (int(self.lineEdit.text()) < 0 or int(self.lineEdit_3.text()) < 0 or int(
@@ -486,6 +489,9 @@ class Ui_MainWindow(QMainWindow, object):
                         self.lineEdit_14.text()) < 0 or int(self.lineEdit_16.text()) < 0):
                 QMessageBox.about(self, "Economic", "0~10 범위 내로 값을 올바르게 입력하였는지 다시 확인해 주시기 바랍니다.")
 
+            elif item[0] < int(self.lineEdit_2.text()) or item[1] < int(self.lineEdit_4.text()) or item[2] < int(self.lineEdit_6.text()) or item[3] < int(self.lineEdit_8.text()) or item[4] < int(self.lineEdit_10.text()) or item[5] < int(self.lineEdit_12.text()) or item[6] < int(self.lineEdit_14.text()) or item[7] < int(self.lineEdit_16.text()):
+                QMessageBox.about(self, "Economic", "현재 보유한 아이템보다 더 많이 팔 수 없습니다.")
+
             else:
                 # Dict 만들어 주고 서버로 전송하는 부분 추가
                 data = "SEND/" + str(self.lineEdit.text()) + ":" + str(self.lineEdit_2.text()) + "/" + str(
@@ -496,12 +502,34 @@ class Ui_MainWindow(QMainWindow, object):
                     self.lineEdit_11.text()) + ":" + str(self.lineEdit_12.text()) + "/" + str(
                     self.lineEdit_13.text()) + ":" + str(self.lineEdit_14.text()) + "/" + str(
                     self.lineEdit_15.text()) + ":" + str(self.lineEdit_16.text())
-                QMessageBox.about(self, "Economic", data)
+                # QMessageBox.about(self, "Economic", data)
                 # {'커피': 5, '밀가루': 5, '희토류': 5, '석유': 5, '소고기': 5, '시멘트': 5, '알루미늄': 5, '강철': 5}
                 try:
                     mysock.send(bytes(data, 'UTF-8'))  # 서버에 메시지를 전송
                 except OSError:
                     exit()
+
+
+                '''
+                아이템 값 갱신
+                '''
+                item[0] -= int(self.lineEdit_2.text())
+                item[1] -= int(self.lineEdit_4.text())
+                item[2] -= int(self.lineEdit_6.text())
+                item[3] -= int(self.lineEdit_8.text())
+                item[4] -= int(self.lineEdit_10.text())
+                item[5] -= int(self.lineEdit_12.text())
+                item[6] -= int(self.lineEdit_14.text())
+                item[7] -= int(self.lineEdit_16.text())
+
+                item[0] += int(self.lineEdit.text())
+                item[1] += int(self.lineEdit_3.text())
+                item[2] += int(self.lineEdit_5.text())
+                item[3] += int(self.lineEdit_7.text())
+                item[4] += int(self.lineEdit_9.text())
+                item[5] += int(self.lineEdit_11.text())
+                item[6] += int(self.lineEdit_13.text())
+                item[7] += int(self.lineEdit_15.text())
 
 
 class Window(QMainWindow):
