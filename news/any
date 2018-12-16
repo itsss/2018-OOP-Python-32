@@ -13,23 +13,23 @@
 33 | 스마트 패드의 이용 범위가 확대되고 있다. | 공급 | image/rare earth/smartpad_increase.PNG
 34 | 티베트의 희토류 광산이 개발되어 수출이 시작되었다. | 공급 | image/rare earth/tibet_mine.PNG
 35 | 중국이 희토류에 대한 수출을 제한하였다. | 공급 | image/rare earth/china_restrict.JPG
-41 | 대채제 가격 증가 | ? | image/wheat flour/other_price_increase.PNG
-42 | 세계 인구 증가 | ? | image/wheat flour/world_people_increase.jpg
-43 | 병충해 | ? | image/wheat flour/byeongchung.jpg
-44 | 밀풍년 | ? | image/wheat flour/lots_of_wheat.jpg
-45 | 밀가루 건강 악화 | ? | image/wheat flour/wheat_helath.PNG
-51 | 건설업 호황 | ? | image/wheat flour/construction_good.jpg
-52 | 세계적 건축물 | ? | image/cement/world_construction.jpg
-53 | 석회석 광산 | ? | image/cement/mine_cement.jpg
-54 | 석회석 광산 매몰 | ? | image/cement/mine_cement_collapse.jpg
-55 | 무시멘트 결합 재개발 | ? | image/cement/non_cement_reconstruction.PNG
-61 | 알루미늄 공장 | ? | image/aluminum/aluminum_factory.JPG
-62 | 항공우주 | ? | image/aluminum/aerospace.jpg
-63 | 알루미늄 제련 기술 | ? | image/aluminum/aluminum_techonolgy.PNG
-64 | 보크사이트 광산 개발 | ? | image/aluminum/boksite_mine_develop.jpg
-65 | 알루미늄 유해성 | ? | image/aluminum/aluminum_bad.PNG
-71 | 철 제련 기술 | ? | image/steel/steel_making_techonlogy.PNG
-72 | 철골 제작 기술 | ? | image/steel/steel_structure.jpg
-73 | 채굴 무인화 | ? | image/steel/self_mining.jpg
-74 | 자동차 생산 확대 | ? | image/steel/car_usage_many.jpg
-75 | 건설업계 불황 | ? | image/steel/construction_not_good.PNG
+41 | 벼, 옥수수 등 다른 식량작물 가격이 급등하고 있다. | 수요 | image/wheat flour/other_price_increase.PNG
+42 | 세계 인구가 급증하고 있다. | 수요 | image/wheat flour/world_people_increase.jpg
+43 | 밀에 치명적인 병충해가 세계를 휩쓸었다. | 공급 | image/wheat flour/byeongchung.jpg
+44 | 세계 최대 밀 생산지에 풍년이 들었다. | 공급 | image/wheat flour/lots_of_wheat.jpg
+45 | 밀가루가 건강에 해롭다는 연구결과가 발표되었다. | 수요 | image/wheat flour/wheat_helath.PNG
+51 | 건설업계가 호황을 누리고 있다. | 수요 | image/wheat flour/construction_good.jpg
+52 | 세계적인 건축물들의 건축이 시작되고 있다. | 수요 | image/cement/world_construction.jpg
+53 | 대규모 석회석 광산이 동시에 개발되기 시작하였다. | 공급 | image/cement/mine_cement.jpg
+54 | 석회석 광산 매몰 사고가 일어나 일시적으로 석회석 채굴이 제한되었다. | 공급 | image/cement/mine_cement_collapse.jpg
+55 | 무시멘트 결합재가 개발되었다. | 공급재 | image/cement/non_cement_reconstruction.PNG
+61 | 대규모 알루미늄 입연공장이 건설되었다. | 공급 | image/aluminum/aluminum_factory.JPG
+62 | 우주항공 분야 투자가 활발해지고 있다. | 수요 | image/aluminum/aerospace.jpg
+63 | 알루미늄 제련에 관한 혁신적인 기술이 발견되었다. | 공급 | image/aluminum/aluminum_techonolgy.PNG
+64 | 열대지방에서 보크사이트 광산 개발이 활발하다. | 공급 | image/aluminum/boksite_mine_develop.jpg
+65 | 알루미늄의 인체 유해성 논란이 나타나고 있다. | 수요 | image/aluminum/aluminum_bad.PNG
+71 | 철의 제련에 관한 혁신적인 기술을 발견하였다. | 공급 | image/steel/steel_making_techonlogy.PNG
+72 | 건축 규제 강화로 튼튼한 철골구조가 요구되고 있다. | 수요 | image/steel/steel_structure.jpg
+73 | 철광석의 채굴이 무인화되어 생산성이 높아졌다. | 공급 | image/steel/self_mining.jpg
+74 | 전세계적으로 자동차의 이용범위가 확대되고 있다. | 수요 | image/steel/car_usage_many.jpg
+75 | 건축 및 토목 공사가 매우 부진한 상황이 계속되고 있다. | 수요 | image/steel/construction_not_good.PNG
