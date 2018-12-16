@@ -10,7 +10,7 @@
 25 | 설탕 및 우유의 가격이 상승하고 있다. | 수요 | image/coffee/milk_sugar_increase.png
 31 | 세계적으로 스마트 기기의 가격인상이 예상되고 있다. | 수요 | image/rare earth/smart_increase.PNG
 32 | 북한의 희토류 개발 및 수출이 증가하고 있다. | 공급 | image/rare earth/north_korea.jpg
-33 | 스마트 패드의 이용 범위가 확대되고 있다. | 공급 | image/rare earth/smartpad_increase.PNG
+33 | 스마트 패드의 이용 범위가 확대되고 있다. | 수요 | image/rare earth/smartpad_increase.PNG
 34 | 티베트의 희토류 광산이 개발되어 수출이 시작되었다. | 공급 | image/rare earth/tibet_mine.PNG
 35 | 중국이 희토류에 대한 수출을 제한하였다. | 공급 | image/rare earth/china_restrict.JPG
 41 | 벼, 옥수수 등 다른 식량작물 가격이 급등하고 있다. | 수요 | image/wheat flour/other_price_increase.PNG
@@ -22,7 +22,7 @@
 52 | 세계적인 건축물들의 건축이 시작되고 있다. | 수요 | image/cement/world_construction.jpg
 53 | 대규모 석회석 광산이 동시에 개발되기 시작하였다. | 공급 | image/cement/mine_cement.jpg
 54 | 석회석 광산 매몰 사고가 일어나 일시적으로 석회석 채굴이 제한되었다. | 공급 | image/cement/mine_cement_collapse.jpg
-55 | 무시멘트 결합재가 개발되었다. | 공급재 | image/cement/non_cement_reconstruction.PNG
+55 | 무시멘트 결합재가 개발되었다. | 수요 | image/cement/non_cement_reconstruction.PNG
 61 | 대규모 알루미늄 입연공장이 건설되었다. | 공급 | image/aluminum/aluminum_factory.JPG
 62 | 우주항공 분야 투자가 활발해지고 있다. | 수요 | image/aluminum/aerospace.jpg
 63 | 알루미늄 제련에 관한 혁신적인 기술이 발견되었다. | 공급 | image/aluminum/aluminum_techonolgy.PNG
@@ -37,4 +37,4 @@
 82 | LPG 가스의 수요가 증가하고 있다. | 수요 | image/oil/LPG_gas_usage_increase.PNG
 83 | 중동 지역의 국제 분쟁이 확산되고 있다. | 공급 | image/oil/international_war.jpg
 84 | 조만간 국제 원유 가격이 하락할 것으로 예상되고 있다. | 공급 | image/oil/oil_decrease.PNG
-85 | 원자력 발전소 건설이 세계적으로 증가하고 있다. |  | image/oil/nuclear_gen.PNG
+85 | 원자력 발전소 건설이 세계적으로 증가하고 있다. | 수요 | image/oil/nuclear_gen.PNG
