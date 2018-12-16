@@ -15,7 +15,7 @@ loc = 0  # 이미지 보이는 위치 확인용
 
 # 접속하고자 하는 서버의 주소 및 포트
 server_ip = '127.0.0.1'
-server_port = 60003
+server_port = 60007
 address = (server_ip, server_port)
 
 # socket을 이용해서 접속 할 준비
@@ -28,6 +28,9 @@ except ConnectionRefusedError:
     exit()
 
 Model = QStandardItemModel()
+pic_a = []
+pic_b = []
+pic_c = []
 
 class Ui_MainWindow(QMainWindow, object):
     # 서버로부터 데이터를 받는 함수
@@ -38,17 +41,11 @@ class Ui_MainWindow(QMainWindow, object):
         MainWindow.resize(620, 506)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.listView = QtWidgets.QListView(self.centralwidget)
-        self.listView.setGeometry(QtCore.QRect(380, 30, 231, 192))
-        self.listView.setObjectName("listView")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(380, 10, 111, 16))
-        self.label.setObjectName("label")
         self.listView_2 = QtWidgets.QListView(self.centralwidget)
-        self.listView_2.setGeometry(QtCore.QRect(380, 260, 231, 192))
+        self.listView_2.setGeometry(QtCore.QRect(380, 41, 231, 411))
         self.listView_2.setObjectName("listView_2")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(380, 240, 111, 16))
+        self.label_2.setGeometry(QtCore.QRect(380, 10, 111, 16))
         self.label_2.setObjectName("label_2")
         self.widget = QtWidgets.QWidget(self.centralwidget)
         self.widget.setGeometry(QtCore.QRect(10, 40, 351, 261))
@@ -173,11 +170,11 @@ class Ui_MainWindow(QMainWindow, object):
         self.pushButton.clicked.connect(self.btn_left_clicked)  # 왼쪽, 오른쪽 버튼 클릭
         self.pushButton_2.clicked.connect(self.btn_right_clicked)
 
-        pixmap = QPixmap('image/beef/cow_price_increase.png') # 이미지 구현
+        pixmap = QPixmap('image/example.png') # 이미지 구현
         pixmap = pixmap.scaled(351, 251)
         self.label_15.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
-        self.lineEdit_17.setText("[5/8] 소고기 가격이 올랐습니다.")
+        self.lineEdit_17.setText("데이터 전송 대기 중입니다.")
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -185,7 +182,6 @@ class Ui_MainWindow(QMainWindow, object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "EconomicGame"))
-        self.label.setText(_translate("MainWindow", "접속한 사용자 목록"))
         self.label_2.setText(_translate("MainWindow", "Status"))
         self.pushButton.setText(_translate("MainWindow", "<"))
         self.pushButton_2.setText(_translate("MainWindow", ">"))
@@ -222,13 +218,58 @@ class Ui_MainWindow(QMainWindow, object):
         self.pushButton_3.setText(_translate("MainWindow", "결정"))
 
     def receive(self):
-        global mysock, Model
+        '''
+            파일을 받는 형식
+
+            [게임 시작 전]
+            플레이어 들어오고 나가는 정보,
+            PLAYER_JOIN|1
+            PLAYER_QUIT|1
+
+            플레이어가 전부 들어가면 시작한다는 메시지
+            그냥 텍스트로 보내기 (Status 창에 띄움)
+
+            [게임 중]
+            1. 표시할 그림 정보 11, 21, 31 등으로…
+            DATA|11/22/33/44...
+
+            2. 현재 시세표 보여주기 (밀가루 5만원 등)
+            PRICE|10/9/…
+
+            3. 각 턴마다 아이템의 가격(변동된 시세) 및 플레이어별 서로의 손익 정보
+            PL|10/-10
+
+            [게임 종료 후]
+            누적 수익이 가장 높은 사람 및 순위 출력
+            PLAYER|a,10/b,5/…
+
+        '''
+        global mysock, Model, pic_a, pic_b, pic_c
 
         while True:
             try:
-                data = mysock.recv(1024)
-                Model.appendRow(QStandardItem(data.decode('UTF-8')))
-                self.listView_2.setModel(Model)
+                re = mysock.recv(1024)
+                data = re.decode('UTF-8')
+                print(data)
+
+                if data[:11] == 'PLAYER_JOIN':  # 게임 시작 전
+                    data2 = str(data[12] + '이 입장하였습니다.')
+                    Model.appendRow(QStandardItem(data2))
+                    self.listView_2.setModel(Model)
+
+                elif data[:11] == 'PLAYER_QUIT':
+                    data2 = str(data[12] + '이 퇴장하였습니다.')
+                    Model.appendRow(QStandardItem(data2))
+                    self.listView_2.setModel(Model)
+
+                elif data[:4] == 'DATA':
+                    # [11, 22, 33, 44, 55, 65, 75, 85] 형식으로 저장
+                    pic = list(map(int, data[5:].split("/")))
+                    pic_a, pic_b, pic_c = self.test_image_view(pic)
+
+                else:
+                    Model.appendRow(QStandardItem(data))
+                    self.listView_2.setModel(Model)
 
             except OSError:
                 print('연결이 종료되었습니다.')
@@ -263,12 +304,14 @@ class Ui_MainWindow(QMainWindow, object):
 
         test_image_link=[]
         quote = []
+        supply_demand = []
 
-        for i in range(3):  # 표시해야 하는 아이템의 개수
-            for j in range(15):  # 파일에 저장되어 있는 아이템의 개수
+        for i in range(8):  # 표시해야 하는 아이템의 개수
+            for j in range(40):  # 파일에 저장되어 있는 아이템의 개수
                 if int(srv_val[i]) == int(a[j]):  # 만약 찾고자 하는 이미지가 인덱스에 있다면
                     test_image_link.append(d[j])  # 문구와 이미지 location을 append함
                     quote.append(b[j])
+                    supply_demand.append(c[j])
 
         text_img_file = test_image_link[0]  # 첫 번째 이미지를 현시해 주는 기능
         print(text_img_file[1:-1])
@@ -276,13 +319,12 @@ class Ui_MainWindow(QMainWindow, object):
         pixmap = pixmap.scaled(351, 251)
         self.label_15.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
-        loc = 0
-        text_img = '['+str(int(loc+1))+'/8] ' + quote[0]
+        text_img = '['+str(int(loc+1))+'/8] ' + quote[0] + '(' + supply_demand[0] + ')'
 
         # pixmap = QPixmap('image/beef/cow_price_increase.png')
         self.lineEdit_17.setText(text_img)
 
-        return test_image_link, quote
+        return test_image_link, quote, supply_demand
 
         '''
         추후 보완사항
@@ -298,16 +340,43 @@ class Ui_MainWindow(QMainWindow, object):
             QMessageBox.about(self, "Economic", "데이터가 없습니다.")
             loc += 1
 
+        else:
+            text_img_file = pic_a[loc]  # 첫 번째 이미지를 현시해 주는 기능
+            print(text_img_file[1:-1])
+            pixmap2 = QPixmap(text_img_file[1:-1])
+            pixmap2 = pixmap2.scaled(351, 251)
+            self.label_15.setPixmap(pixmap2)
+            self.resize(pixmap2.width(), pixmap2.height())
+            text_img = '[' + str(int(loc + 1)) + '/8] ' + pic_b[loc] + '(' + pic_c[loc] + ')'
+            QMessageBox.about(self, "Economic", "전체 8개 그림 중 " + str(int(loc + 1)) + " 번째 그림")
+
+            # pixmap = QPixmap('image/beef/cow_price_increase.png')
+            self.lineEdit_17.setText(text_img)
+
     def btn_right_clicked(self):
         global loc
         loc += 1
         print('>>>', loc)
+        print(pic_a)
+        print(pic_b)
+        print(pic_c)
         if loc >= 8:
             QMessageBox.about(self, "Economic", "데이터가 없습니다.")
             loc -= 1
 
+        else:
+            text_img_file = pic_a[loc]  # 첫 번째 이미지를 현시해 주는 기능
+            print(text_img_file[1:-1])
+            pixmap2 = QPixmap(text_img_file[1:-1])
+            pixmap2 = pixmap2.scaled(351, 251)
+            self.label_15.setPixmap(pixmap2)
+            self.resize(pixmap2.width(), pixmap2.height())
+            text_img = '[' + str(int(loc + 1)) + '/8] ' + pic_b[loc] + '(' + pic_c[loc] + ')'
+            QMessageBox.about(self, "Economic", "전체 8개 그림 중 "+str(int(loc+1)) + " 번째 그림")
+
+            self.lineEdit_17.setText(text_img)
+
     def btn_choice_clicked(self):
-        print(self.test_image_view([12,22,33]))
         try:
             buy = int(
                 int(self.lineEdit.text()) + int(self.lineEdit_3.text()) + int(self.lineEdit_5.text()) + int(self.lineEdit_7.text()) + int(self.lineEdit_9.text()) + int(self.lineEdit_11.text()) + int(self.lineEdit_13.text()) + int(self.lineEdit_15.text()))
