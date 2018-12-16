@@ -33,8 +33,8 @@
 73 | 철광석의 채굴이 무인화되어 생산성이 높아졌다. | 공급 | image/steel/self_mining.jpg
 74 | 전세계적으로 자동차의 이용범위가 확대되고 있다. | 수요 | image/steel/car_usage_many.jpg
 75 | 건축 및 토목 공사가 매우 부진한 상황이 계속되고 있다. | 수요 | image/steel/construction_not_good.PNG
-81 | 녹색 에너지 | ? | image/oil/green_energy.PNG
-82 | LPG 가스 이용 확대 | ? | image/oil/LPG_gas_usage_increase.PNG
-83 | 중동 국제 분쟁 | ? | image/oil/international_war.jpg
-84 | 유가 하락 예상 | ? | image/oil/oil_decrease.PNG
-85 | 원자력 발전소 | ? | image/oil/nuclear_gen.PNG
+81 | 태양 및 풍력발전에 의한 전기생산성이 개선되고 있다. | 수요 | image/oil/green_energy.PNG
+82 | LPG 가스의 수요가 증가하고 있다. | 수요 | image/oil/LPG_gas_usage_increase.PNG
+83 | 중동 지역의 국제 분쟁이 확산되고 있다. | 공급 | image/oil/international_war.jpg
+84 | 조만간 국제 원유 가격이 하락할 것으로 예상되고 있다. | 공급 | image/oil/oil_decrease.PNG
+85 | 원자력 발전소 건설이 세계적으로 증가하고 있다. |  | image/oil/nuclear_gen.PNG
