@@ -11,6 +11,7 @@ from PyQt5.QtGui import QStandardItem
 # from mainwindow import Ui_MainWindow
 
 cnt_now=1
+loc = 0  # 이미지 보이는 위치 확인용
 
 # 접속하고자 하는 서버의 주소 및 포트
 server_ip = '127.0.0.1'
@@ -254,30 +255,50 @@ class Ui_MainWindow(QMainWindow, object):
 
     def test_image_view(self, srv_val):
         # [11, 22, 33, 44, 51, 61, 71, 81] 형태로 이미지 번호가 리스트로 들어옴
+        global loc
         a,b,c,d = self.read_price_text('any')
 
         test_image_link=[]
+        quote = []
 
-        for i in range(8): # 아이템 개수
-            for j in range(5): # 이미지 개수
-                loc = i*5+j  # 정해진 배열을 찾아갈 수 있도록 (ex. 11번 그림이면 0번지로 가도록)
-                if a[loc] == srv_val[i]:  # for문 그림번호와 리스트에 들어있었던 번호가 같다면
-                    test_image_link.append(d[loc])
+        for i in range(3):  # 표시해야 하는 아이템의 개수
+            for j in range(15):  # 파일에 저장되어 있는 아이템의 개수
+                if int(srv_val[i]) == int(a[j]):  # 만약 찾고자 하는 이미지가 인덱스에 있다면
+                    test_image_link.append(d[j])  # 문구와 이미지 location을 append함
+                    quote.append(b[j])
 
-        # for i in range(8):
-        #     pixmap = QPixmap(test_image_link[i])  # 이미지 구현
-        #     pixmap = pixmap.scaled(351, 251)
-        #     self.label_15.setPixmap(pixmap)
-        #     self.resize(pixmap.width(), pixmap.height())
-        #     self.lineEdit_17.setText("[5/8] 소고기 가격이 올랐습니다.")
+        text_img_file = test_image_link[0]  # 첫 번째 이미지를 현시해 주는 기능
+        print(text_img_file[1:-1])
+        pixmap = QPixmap(text_img_file[1:-1])
+        pixmap = pixmap.scaled(351, 251)
+        self.label_15.setPixmap(pixmap)
+        self.resize(pixmap.width(), pixmap.height())
+        loc = 0
+        text_img = '['+str(int(loc+1))+'/8] ' + quote[0]
+
+        # pixmap = QPixmap('image/beef/cow_price_increase.png')
+        self.lineEdit_17.setText(text_img)
+
+        return test_image_link
 
         '''
         추후 보완사항
-
+        
         왼쪽 오른쪽 버튼을 눌렀을 때 바뀌도록 제작하기
         '''
 
+    def btn_left_clicked(self):
+        global loc
+        if loc < 0:
+            QMessageBox.about(self, "Economic", "데이터가 없습니다.")
+
+    def btn_right_clicked(self):
+        global loc
+        if loc >= 8:
+            QMessageBox.about(self, "Economic", "데이터가 없습니다.")
+
     def btn_choice_clicked(self):
+        print(self.test_image_view([12,22,33]))
         try:
             buy = int(
                 int(self.lineEdit.text()) + int(self.lineEdit_3.text()) + int(self.lineEdit_5.text()) + int(self.lineEdit_7.text()) + int(self.lineEdit_9.text()) + int(self.lineEdit_11.text()) + int(self.lineEdit_13.text()) + int(self.lineEdit_15.text()))
@@ -321,7 +342,7 @@ class Ui_MainWindow(QMainWindow, object):
                     self.lineEdit_15.text()) + ":" + str(self.lineEdit_16.text())
                 QMessageBox.about(self, "Economic", data)
                 # {'커피': 5, '밀가루': 5, '희토류': 5, '석유': 5, '소고기': 5, '시멘트': 5, '알루미늄': 5, '강철': 5}
-                mysock.send(bytes(data, 'UTF-8'))
+                # mysock.send(bytes(data, 'UTF-8'))
 
                 # print(self.lineEdit.text())
         # print(self.lineEdit_3.text())
