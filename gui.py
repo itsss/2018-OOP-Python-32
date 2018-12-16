@@ -267,6 +267,40 @@ class Ui_MainWindow(QMainWindow, object):
                     pic = list(map(int, data[5:].split("/")))
                     pic_a, pic_b, pic_c = self.test_image_view(pic)
 
+                elif data[:5] == 'PRICE':  # 각 턴마다 아이템의 가격 및 플레이어별 서로의 손익 정보
+                    price = list(map(int, data[6:].split("/")))
+                    item = ['소고기', '커피', '희토류', '밀가루', '시멘트', '알루미늄', '강철', '석유']
+                    Model.appendRow(QStandardItem("=======현재 시세======="))
+                    cnt = 0
+                    for i in item:
+                        Model.appendRow(QStandardItem(str(i) + ': '+ str(price[cnt])))
+                        cnt += 1
+                    self.listView_2.setModel(Model)
+
+                elif data[:2] == 'PL':  # 플레이어별 서로의 손익 정보
+                    score = list(map(int, data[3:].split("/")))
+                    Model.appendRow(QStandardItem("=======플레이어별 손익 정보======="))
+                    cnt = 0
+                    for i in score:
+                        cnt += 1
+                        Model.appendRow(QStandardItem('플레이어 ' + str(cnt) + ': ' + str(i)))
+                    self.listView_2.setModel(Model)
+
+                elif data[:3] == 'END':  # 게임이 종료된 후, 누적 수익이 가장 높은 사람 및 순위 출력
+                    player = list(map(int, data[4:].split("/")))
+                    Model.appendRow(QStandardItem("=======게임 끝: 최종손익 정보======="))
+                    cnt = 0
+                    max = 0
+                    maxp = 0
+                    for i in player:
+                        cnt += 1
+                        Model.appendRow(QStandardItem('플레이어 ' + str(cnt) + ': ' + str(i)))
+                        if int(i) > max:
+                            max = i
+                            maxp = cnt
+                    Model.appendRow(QStandardItem('플레이어 ' + str(maxp) + '님이 ' + str(max) + '점으로 1등입니다!'))
+                    self.listView_2.setModel(Model)
+
                 else:
                     Model.appendRow(QStandardItem(data))
                     self.listView_2.setModel(Model)
