@@ -454,7 +454,14 @@ class Ui_MainWindow(QMainWindow, object):
                     self.lineEdit_15.text()) + ":" + str(self.lineEdit_16.text())
                 QMessageBox.about(self, "Economic", data)
                 # {'커피': 5, '밀가루': 5, '희토류': 5, '석유': 5, '소고기': 5, '시멘트': 5, '알루미늄': 5, '강철': 5}
-                mysock.send(bytes(data, 'UTF-8'))  # 서버에 메시지를 전송
+                try:
+                    mysock.send(bytes(data, 'UTF-8'))  # 서버에 메시지를 전송
+                except OSError:
+                    QMessageBox.about(self, "Economic", "서버 연결이 종료되었습니다. 게임을 종료합니다.")
+                    exit(1)
+                except ConnectionRefusedError:
+                    QMessageBox.about(self, "Economic", "서버 연결이 종료되었습니다. 게임을 종료합니다.")
+                    exit(1)
 
 
 class Window(QMainWindow):
