@@ -46,15 +46,20 @@ server_socket.listen()
 
 # 플레이어 목록, 최대 인원수
 client_list = []
-client_score = []
+client_item=[]
+client_score = [0,0,0,0,0,0,0,0]
 max_per = 8
+#초기 가격
+#item = ['소고기', '커피', '희토류', '밀가루', '시멘트', '알루미늄', '강철', '석유']
+price=[5,5,5,5,5,5,5,5]
 cnt = 0
 
 #종목의 데이터 정보를 저장하고 있는 리스트
-type_list=[]
+type_list=[[11,12,13,14,15],[21,22,23,24,25],[31,32,33,34,35],[41,42,43,44,45],[51,52,53,54,55],[61,62,63,64,65],[71,72,73,74,75],[81,82,83,84,85]]
 
 
 # 플레이어로부터 데이터를 받아 나머지에게 전송
+#채팅 기능이 방이 들어올때까지만 구현되었습니다... 데이터 섞일 일은 없을 거에요
 def server_chat(client_socket):
     global client_list
     global cnt
@@ -79,15 +84,14 @@ def server_chat(client_socket):
         # 받은 데이터 / 채팅을 나를 제외한 플레이어에게 전송
         for i in client_list:
             if not i == client_socket:
-                print(i)
-                i.send(data)
+                data="SYSTEM/"+data.decode('urf-8')
+                i.send(data.encode('utf-8'))
     # 만약 접속 종료 표기가 있으면 소켓을 닫는다.
     if impos:
         cnt = cnt - 1
         client_socket.close()
         client_list.remove(client_socket)
         print("{} has disconnected".format(client_socket))
-
 
 # 플레이어의 연결을 수행
 def connection():
@@ -99,11 +103,13 @@ def connection():
         # client=[client_socket, client_address]
         # client_list.append(client)
         client_list.append(client_socket)
-        client_socket.send(b"Welcome to economic server!\n")
-        client_socket.send(b"If you want to exit, try \"exit\".")
+        clien_item.append()
+        client_socket.send(b"SYSYEM/Welcome to economic server!\n")
+        client_socket.send(b"SYSTEM/If you want to exit, try \"exit\".")
 
         cnt = cnt + 1
 
+        #클라이언트 정보를 서버에서 출력
         print("Connected from {}".format(client_address))
         print("Now %d players join. List:" % cnt)
         for i in client_list:
@@ -118,44 +124,39 @@ def connection():
 # 게임 시작을 플레이어에게 알림
 # 5초 후 게임을 시작함
 def game_start(client):
-    client.send(b"All player joined! Server is starting game...")
+    client.send(b"SYSTEM/All player joined! Server is starting game...")
     for t in range(5, 0, -1):
-        client.send(str(t).encode('utf-8'))
+        client.send(str("SYSTEM/"+t).encode('utf-8'))
         time.sleep(1)
-    client.send(b"start")
-
-
-def send_num(num, client_socket):
-    b_num = str(num).encode('utf-8')
-    client_socket.send(b_num)
-
-
-def receive(client_socket):
-    try:
-        data = client_socket.recv(1024)
-        if data == (b"exit"):
-            exit()
-    except OSError:
-        exit()
-    print("{}: ".format(client_socket) + data.decode('utf-8'))
+    client.send(b"SYSEM/start")
 
 #랜덤값을 뽑아 클라이언트에게 보내는 함수
 #리스트에 저장된 종목의 데이터를 뽑아 클라이언트에게 전송한다.
+#수정 필요 // 데이터를 새로 뽑아야 합니다아
 def send_type_num():
     global client_list
     global type_list
     #타입의 번호를 저장할 리스트
     now_list=[]
-    for now in type_list:
+    #전송할 데이터
+    send_str=""
+    for i in type_list:
         #리스트에 있는 값을 뽑고
         #리스트에서 삭제, 반환할 리스트에 저장
-        type=rand(now)
+        type=random.choice(i)
         now_list.append(type)
+        send_str="/"+send_str+str(type)
         now.remove(type)
-        for client in clien_list:
-            #바이트로 전환하여 전송
-            client.send(str(type).encode('utf-8'))
+
+
+    #모든 클라이언트에게 데이터 전송
+    for client in clien_list:
+        #바이트로 전환하여 전송
+        #프로토콜 DATA/
+        client.send(str("DATA"+send_str).encode('utf-8'))
     return now_list
+
+
 
 #클라이언트에게서 사고판 수량을 받는 함수
 def receive_selling(client):
@@ -172,24 +173,50 @@ def receive_selling(client):
     for i in range(0,8):
         temp = data[i].split(":")
         val[i] = cnt[i] + int(temp[0]) - int(temp[1])
-
+    return val
 
 #기존 수량과 변화 수량을 받아 판매/구매 후의 수량을 반환하는 함수
 def update_value(bef, cha):
     aft=[]
     for i in range(0,8):
         aft.append(bef[i]-cha[i])
-    return atf
+    return aft
+
+#가격을 변화시키는 함수
+#p id 현재가격, q 부호
+def random_price(p, q):
+    min_val=1
+    max_val=5
+    if q<0:
+        max_val=min(p-1, max_val)
+    change=randint(min_val,max_val)
+    return p+q*change*q
 
 #턴 함수
-#
 def turn():
     global client_list
     global client_score
 
+    #가격 추이 번호 선정
     now_type_list=send_type_num()
-    for i in client_list:
-        receive
+    price_change=[]
+    #변경되는 가격
+    for i in range(0,8):
+        price_change.append(random_price(now_type_list[i], q))
+    
+    for i in range(0,8):
+        change=receive_selling(client_list[i])
+        
+    
+    for i in range(0,8):
+        
+    #가격 변경
+    for i in range(0,8):
+        price[i]=price[i]+price_change[i]
+
+
+
+
 
 connection()
 # rand_num=random.randint(1,10)
@@ -201,4 +228,3 @@ for i in client_list:
 for i in client_list:
     Re = threading.Thread(target=receive, args=(i,))
     Re.start()
-
