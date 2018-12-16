@@ -1,0 +1,15 @@
+11 | 돼지고기 및 양고기의 가격이 폭등하고 있다. | 수요 | image/beef/pork_increase.png
+12 | 고기섭취 반대 및 채식주의 운동이 확산되고 있다. | 수요 | image/beef/vegetarian.png
+13 | 소고기 가격이 오를 것이라는 예상이 나오고 있다. | 수요 | image/beef/cow_price_increase.PNG
+14 | 광우병으로 소고기 소비에 대한 불안감이 높아졌다. | 수요 | image/beef/BSE_cow.png
+15 | 세계적으로 소를 키우는 농가가 증가하고 있다. | 공급 | image/beef/cow_farm_increase.png
+21 | 브라질이 최악의 가뭄을 경험하고 있다.| 공급 | image/coffee/drought.png
+22 | 브라질 지역에 오랜만에 비가 내렸다. | 공급 | image/coffee/drought_clear.png
+23 | 커피 대신 차를 마시는 문화가 확산되고 있다. | 수요 | image/coffee/tea_culture.png
+24 | 콜롬비아 및 에티오피아에 내전이 발생하였다. | 공급 | image/coffee/civil_war.png
+25 | 설탕 및 우유의 가격이 상승하고 있다. | 수요 | image/coffee/milk_sugar_increase.png
+31 | 세계적으로 스마트 기기의 가격인상이 예상되고 있다. | 수요 | image/rare earth/smart_increase.PNG
+32 | 북한의 희토류 개발 및 수출이 증가하고 있다. | 공급 | image/rare earth/north_korea.jpg
+33 | 스마트 패드의 이용 범위가 확대되고 있다. | 공급 | image/rare earth/smartpad_increase.PNG
+34 | 티베트의 희토류 광산이 개발되어 수출이 시작되었다. | 공급 | image/rare earth/tibet_mine.PNG
+35 | 중국이 희토류에 대한 수출을 제한하였다. | 공급 | image/rare earth/china_restrict.JPG
