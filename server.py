@@ -56,8 +56,6 @@ cnt = 0
 
 #종목의 데이터 정보를 저장하고 있는 리스트
 type_list=[[[11,1],[12,-1],[13,1],[14,-1],[15,-1]],[[21,1],[22,-1],[23,-1],[24,1],[25,-1]],[[31,1],[32,-1],[33,1],[34,-1],[35,1]],[[41,-1],[42,1],[43,1],[44,-1],[45,-1]],[[51,1],[52,1],[53,-1],[54,1],[55,-1]],[[61,-1],[62,1],[63,-1],[64,-1],[65,-1]],[[71,-1],[72,1],[73,-1],[74,1],[75,-1]],[[81,-1],[82,1],[83,1],[84,-1],[85,-1]]]
-
-
 # 플레이어로부터 데이터를 받아 나머지에게 전송
 #채팅 기능이 방이 들어올때까지만 구현되었습니다... 데이터 섞일 일은 없을 거에요
 def server_chat(client_socket):
@@ -84,7 +82,7 @@ def server_chat(client_socket):
         # 받은 데이터 / 채팅을 나를 제외한 플레이어에게 전송
         for i in client_list:
             if not i == client_socket:
-                data="SYSTEM/"+data.decode('urf-8')
+                data="SYSTEM|"+data.decode('urf-8')
                 i.send(data.encode('utf-8'))
     # 만약 접속 종료 표기가 있으면 소켓을 닫는다.
     if impos:
@@ -147,20 +145,12 @@ def send_type_num():
         now_list.append(type)
         send_str="/"+send_str+str(type)
         now.remove(type)
-
-
-    #모든 클라이언트에게 데이터 전송
-    for client in clien_list:
-        #바이트로 전환하여 전송
-        #프로토콜 DATA/
-        client.send(str("DATA"+send_str).encode('utf-8'))
     return now_list
 
 
 
 #클라이언트에게서 사고판 수량을 받는 함수
-def receive_selling(client):
-    val=[0,0,0,0,0,0,0,0]
+def receive_selling(client, val):
     try:
         #받는 데이터 형태는 b"a:b/c:d/ ... /p:q"
         data=client.recv(1024)
@@ -173,7 +163,6 @@ def receive_selling(client):
     for i in range(0,8):
         temp = data[i].split(":")
         val[i] = cnt[i] + int(temp[0]) - int(temp[1])
-    return val
 
 #기존 수량과 변화 수량을 받아 판매/구매 후의 수량을 반환하는 함수
 def update_value(bef, cha):
@@ -188,6 +177,8 @@ def random_price(p, q):
     min_val=1
     max_val=5
     if q<0:
+        if p==1:
+            return 0
         max_val=min(p-1, max_val)
     change=randint(min_val,max_val)
     return p+q*change*q
@@ -196,25 +187,43 @@ def random_price(p, q):
 def turn():
     global client_list
     global client_score
+    global price
+    global client_item
+    global symbol
 
     #가격 추이 번호 선정
     now_type_list=send_type_num()
+
     price_change=[]
-    #변경되는 가격
+    #변경되는 가격 리스트
     for i in range(0,8):
-        price_change.append(random_price(now_type_list[i], q))
-    
-    for i in range(0,8):
-        change=receive_selling(client_list[i])
-        
-    
-    for i in range(0,8):
-        
+        price_change.append(random_price(now_type_list[i][0], now_type_list[i][1]))
     #가격 변경
     for i in range(0,8):
         price[i]=price[i]+price_change[i]
 
-
+    #클라이언트에게서 받는 사고 판 리스트
+    for i in client_list:
+        #사기/팔기 데이터를 읽어오기
+        val = [0, 0, 0, 0, 0, 0, 0, 0]
+        get_data=threading.thread(target=receive_selling, args=(i,val,))
+        #시세표
+        now_price="PRICE|"
+        for j in range(0,8):
+            now_price=now_price+str(price[i])+"/"
+        i.send(now_price.encode('utf-8'))
+        #수익
+        p=0
+        for j in range(0,8):
+           p=p+change[i]*price_change[i]
+        i.send(str("End|"+p).encode('utf-8'))
+        #최종 수익 변경
+        client_score[i]=client_score[i]+price_chage[i]
+        max_list=sorted(client_score)
+        max_list.reverse()
+        #점수 클라이언트에게 보내기
+        for j in range(0,8):
+            i.send(str(max_list[i]).encode('utf-8'))
 
 
 
@@ -225,6 +234,8 @@ connection()
 for i in client_list:
     A = threading.Thread(target=game_start, args=(i,))
     A.start()
-for i in client_list:
-    Re = threading.Thread(target=receive, args=(i,))
-    Re.start()
+
+turn_cnt=0
+while turn_cnt<5:
+    turn()
+    turn_cnt=turn_cnt+1
