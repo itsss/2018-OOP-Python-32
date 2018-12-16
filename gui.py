@@ -170,6 +170,9 @@ class Ui_MainWindow(QMainWindow, object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        self.pushButton.clicked.connect(self.btn_left_clicked)  # 왼쪽, 오른쪽 버튼 클릭
+        self.pushButton_2.clicked.connect(self.btn_right_clicked)
+
         pixmap = QPixmap('image/beef/cow_price_increase.png') # 이미지 구현
         pixmap = pixmap.scaled(351, 251)
         self.label_15.setPixmap(pixmap)
@@ -279,7 +282,7 @@ class Ui_MainWindow(QMainWindow, object):
         # pixmap = QPixmap('image/beef/cow_price_increase.png')
         self.lineEdit_17.setText(text_img)
 
-        return test_image_link
+        return test_image_link, quote
 
         '''
         추후 보완사항
@@ -289,13 +292,19 @@ class Ui_MainWindow(QMainWindow, object):
 
     def btn_left_clicked(self):
         global loc
+        loc -= 1
+        print('<<<', loc)
         if loc < 0:
             QMessageBox.about(self, "Economic", "데이터가 없습니다.")
+            loc += 1
 
     def btn_right_clicked(self):
         global loc
+        loc += 1
+        print('>>>', loc)
         if loc >= 8:
             QMessageBox.about(self, "Economic", "데이터가 없습니다.")
+            loc -= 1
 
     def btn_choice_clicked(self):
         print(self.test_image_view([12,22,33]))
