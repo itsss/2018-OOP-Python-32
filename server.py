@@ -179,7 +179,7 @@ def receive_selling(client, num):
     #구매/판매 수량을 변화 리스트에 저장
     for i in range(0, 8):
         temp = data3[i].split(":")
-        val[num][i] += int(temp[0]) - int(temp[1])
+        val[num][i] += int(temp[1]) - int(temp[0])
 
 #기존 수량과 변화 수량을 받아 판매/구매 후의 수량을 반환하는 함수
 def update_value(bef, cha):
