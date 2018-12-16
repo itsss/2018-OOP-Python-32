@@ -1,42 +1,48 @@
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QLineEdit, QMessageBox
+from PyQt5 import QtCore, QtWidgets
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QPixmap
-import socket
-from threading import Thread
 from PyQt5.QtGui import QStandardItemModel
 from PyQt5.QtGui import QStandardItem
+import socket
+from threading import Thread
 
-# from mainwindow import Ui_MainWindow
-
-cnt_now=1
 loc = 0  # 이미지 보이는 위치 확인용
 
-# 접속하고자 하는 서버의 주소 및 포트
+# 접속하고자 하는 서버의 주소 및 포트 기술
 server_ip = '127.0.0.1'
 server_port = 60000
 address = (server_ip, server_port)
 
 # socket을 이용해서 접속 할 준비
 mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-try:
-    mysock.connect(address)  # 서버에 접속
 
+# 서버에 접속을 시도
+try:
+    mysock.connect(address)
+
+# 만약, 서버에 접속이 어려울 경우
 except ConnectionRefusedError:
     print('서버 상태를 확인하십시오.')
     exit()
 
+# any 문서에 대한 정보를 담는 배열 및 ListView 정보를 담는 배열
 Model = QStandardItemModel()
 pic_a = []
 pic_b = []
 pic_c = []
 
 class Ui_MainWindow(QMainWindow, object):
-    # 서버로부터 데이터를 받는 함수
-    # start를 전송받으면 게임을 시작 / 함수를 종료
+    '''
+    GUI MainWindow 클래스
+    '''
 
     def setupUi(self, MainWindow):
+        '''
+        UI Setup 클래스
+        :param MainWindow:
+        :return:
+        '''
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(620, 506)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -180,6 +186,11 @@ class Ui_MainWindow(QMainWindow, object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
+        '''
+        GUI에 들어가는 여러 아이템의 텍스트 설정 함수
+        :param MainWindow:
+        :return:
+        '''
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "EconomicGame"))
         self.label_2.setText(_translate("MainWindow", "Status"))
@@ -219,7 +230,7 @@ class Ui_MainWindow(QMainWindow, object):
 
     def receive(self):
         '''
-            파일을 받는 형식
+            메시지를 받는 형식
 
             [게임 시작 전]
             플레이어 들어오고 나가는 정보,
@@ -241,7 +252,7 @@ class Ui_MainWindow(QMainWindow, object):
 
             [게임 종료 후]
             누적 수익이 가장 높은 사람 및 순위 출력
-            PLAYER|a,10/b,5/…
+            END|10/20/30
 
         '''
         global mysock, Model, pic_a, pic_b, pic_c
@@ -265,22 +276,22 @@ class Ui_MainWindow(QMainWindow, object):
                 print("서버로부터 정상적으로 로그아웃했습니다.")
                 break
 
-            if data[:11] == 'PLAYER_JOIN':  # 게임 시작 전
+            if data[:11] == 'PLAYER_JOIN':  # 게임 시작 전, 플레이어가 들어오는 경우
                 data2 = str(data[12] + '이 입장하였습니다.')
                 Model.appendRow(QStandardItem(data2))
                 self.listView_2.setModel(Model)
 
-            elif data[:11] == 'PLAYER_QUIT':
+            elif data[:11] == 'PLAYER_QUIT':  # 게임 시작 전, 플레이어가 나가는 경우
                 data2 = str(data[12] + '이 퇴장하였습니다.')
                 Model.appendRow(QStandardItem(data2))
                 self.listView_2.setModel(Model)
 
-            elif data[:4] == 'DATA':
+            elif data[:4] == 'DATA':  # 이미지 데이터가 들어오는 경우 처리하는 함수
                 # [11, 22, 33, 44, 55, 65, 75, 85] 형식으로 저장
                 pic = list(map(int, data[5:].split("/")))
                 pic_a, pic_b, pic_c = self.test_image_view(pic)
 
-            elif data[:5] == 'PRICE':  # 각 턴마다 아이템의 가격 및 플레이어별 서로의 손익 정보
+            elif data[:5] == 'PRICE':  # 각 턴마다의 아이템의 가격 (현재 시세)
                 price = list(map(int, data[6:].split("/")))
                 item = ['소고기', '커피', '희토류', '밀가루', '시멘트', '알루미늄', '강철', '석유']
                 Model.appendRow(QStandardItem("=======현재 시세======="))
@@ -327,6 +338,12 @@ class Ui_MainWindow(QMainWindow, object):
     def read_price_text(self, val):
         # val: 아이템명 (beef, coffee, rare earth, etc...)
         # ref: Millstone Project (oop-project-ex)
+        '''
+        val 파라미터로 입력된 데이터에서 텍스트를 긁어오는 함수
+        '|' 로 구분된 데이터가 리스트에 저장됨.
+        :param val:
+        :return:
+        '''
         id = []
         description = []
         sd = []
@@ -345,6 +362,13 @@ class Ui_MainWindow(QMainWindow, object):
         return id, description, sd, image
 
     def test_image_view(self, srv_val):
+        '''
+        서버에서 입력된 리스트가 함수에 입력됨,
+        그럼 이 함수는 입력된 리스트의 그림 위치, 수요/공급 정보, 내용을 입력받아 반환함.
+        첫 번째 이미지를 pixmap을 활용해 띄우는 역할 또한 수행함.
+        :param srv_val:
+        :return:
+        '''
         # [11, 22, 33, 44, 51, 61, 71, 81] 형태로 이미지 번호가 리스트로 들어옴
         global loc
         a,b,c,d = self.read_price_text('any')
@@ -373,22 +397,21 @@ class Ui_MainWindow(QMainWindow, object):
 
         return test_image_link, quote, supply_demand
 
-        '''
-        추후 보완사항
-        
-        왼쪽 오른쪽 버튼을 눌렀을 때 바뀌도록 제작하기
-        '''
 
     def btn_left_clicked(self):
+        '''
+        왼쪽 버튼을 눌렀을 때, 이전 이미지로 바꾸는 함수
+        :return:
+        '''
         global loc
         loc -= 1
         print('<<<', loc)
-        if loc < 0:
+        if loc < 0:  # 0 밑으로 데이터가 없으므로, 데이터가 없다는 메시지를 출력
             QMessageBox.about(self, "Economic", "데이터가 없습니다.")
             loc += 1
 
         else:
-            text_img_file = pic_a[loc]  # 첫 번째 이미지를 현시해 주는 기능
+            text_img_file = pic_a[loc]  # 이전 이미지를 현시해 주는 기능
             print(text_img_file[1:-1])
             pixmap2 = QPixmap(text_img_file[1:-1])
             pixmap2 = pixmap2.scaled(351, 251)
@@ -401,18 +424,22 @@ class Ui_MainWindow(QMainWindow, object):
             self.lineEdit_17.setText(text_img)
 
     def btn_right_clicked(self):
+        '''
+        오른쪽 버튼을 눌렀을 때, 다음 이미지로 바꾸는 함수
+        :return:
+        '''
         global loc
         loc += 1
         print('>>>', loc)
         print(pic_a)
         print(pic_b)
         print(pic_c)
-        if loc >= 8:
+        if loc >= 8:  # 8 이상으로 데이터가 없으므로, 데이터가 없다는 메시지를 출력
             QMessageBox.about(self, "Economic", "데이터가 없습니다.")
             loc -= 1
 
         else:
-            text_img_file = pic_a[loc]  # 첫 번째 이미지를 현시해 주는 기능
+            text_img_file = pic_a[loc]  # 다음 이미지를 현시해 주는 기능
             print(text_img_file[1:-1])
             pixmap2 = QPixmap(text_img_file[1:-1])
             pixmap2 = pixmap2.scaled(351, 251)
@@ -424,6 +451,10 @@ class Ui_MainWindow(QMainWindow, object):
             self.lineEdit_17.setText(text_img)
 
     def btn_choice_clicked(self):
+        '''
+        사용자가 결정 버튼을 눌렀을 때, 서버에 플레이어가 사고판 내역을 전송함.
+        :return:
+        '''
         try:
             buy = int(
                 int(self.lineEdit.text()) + int(self.lineEdit_3.text()) + int(self.lineEdit_5.text()) + int(self.lineEdit_7.text()) + int(self.lineEdit_9.text()) + int(self.lineEdit_11.text()) + int(self.lineEdit_13.text()) + int(self.lineEdit_15.text()))
